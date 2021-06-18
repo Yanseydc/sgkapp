@@ -1,0 +1,554 @@
+.has-fade {
+  visibility: hidden;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  1% {
+    visibility: visible;
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.fade-in {
+  animation: fade-in 300ms ease-in-out forwards;
+}
+
+@keyframes fade-out {
+  from {
+    visibility: visible;
+    opacity: 1;
+  }
+  99% {
+    visibility: visible;
+    opacity: 0.5;
+  }
+  to {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+.fade-out {
+  animation: fade-out 300ms ease-in-out forwards;
+}
+
+html {
+  font-size: 100%;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  line-height: 1.3;
+  font-size: 1.125rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  height: 100%;
+}
+
+body.noscroll {
+  overflow: hidden;
+}
+
+a, a:hover, a:visited {
+  text-decoration: none;
+}
+
+.container {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-jc-sb {
+  justify-content: space-between;
+}
+
+.flex-jc-c {
+  justify-content: center;
+}
+
+.flex-ai-c {
+  align-items: center;
+}
+
+.button {
+  padding: 0.875rem 2.1875rem;
+  border-radius: 50px;
+  cursor: pointer;
+  background: linear-gradient(to right, red, coral);
+  color: white;
+  border: 0;
+  font-weight: 400;
+}
+
+@media (max-width: 63.9375em) {
+  .hide-for-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 64em) {
+  .hide-for-desktop {
+    display: none;
+  }
+}
+
+.app__content {
+  height: 100vh;
+}
+
+.header {
+  background-color: #3f3d57;
+}
+
+.header.open .header__hamburguer > span:first-child {
+  transform: rotate(45deg);
+}
+
+.header.open .header__hamburguer > span:nth-child(2) {
+  width: 0;
+  opacity: 0;
+}
+
+.header.open .header__hamburguer > span:last-child {
+  transform: rotate(-45deg);
+}
+
+.header nav {
+  padding-top: 1.0625rem;
+  padding-bottom: 1.0625rem;
+}
+
+.header__logo {
+  background: linear-gradient(to right, #D71F2A, white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header__hamburguer > span {
+  display: block;
+  background-color: white;
+  width: 25px;
+  height: 2px;
+  transition: all 300ms ease-in-out;
+  transform-origin: 2px 1px;
+}
+
+.header__hamburguer > span:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.header__menu {
+  position: absolute;
+  background: white;
+  padding: 1.625rem;
+  border-radius: 5px;
+  margin-top: 1.5rem;
+  width: calc(100% - 3rem);
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.header__menu a {
+  display: block;
+  text-align: center;
+  padding: 0.625rem;
+  color: darkblue;
+}
+
+.header__menu a:hover {
+  background-color: coral;
+  color: white;
+}
+
+.header__links a {
+  font-size: 0.875rem;
+  color: black;
+  position: relative;
+}
+
+.header__links a::before {
+  content: "";
+  position: absolute;
+  display: block;
+  height: 5px;
+  left: 0;
+  right: 0;
+  bottom: -30px;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+.header__links a:hover {
+  color: gray;
+}
+
+.header__links a:hover::before {
+  background: coral;
+  opacity: 1;
+}
+
+.header__links a:not(:last-child) {
+  margin-right: 30px;
+}
+
+.header__cta {
+  font-size: 0.875rem;
+  color: white;
+  transition: opacity 300ms ease-in-out;
+}
+
+.header__cta:hover {
+  opacity: 0.75;
+}
+
+.header__user a {
+  position: relative;
+  color: white;
+}
+
+.header__user a span {
+  margin-right: 10px;
+  letter-spacing: 1px;
+}
+
+.header__user a:hover {
+  color: #ca802b;
+}
+
+.header__user a:hover:before {
+  color: #ca802b;
+}
+
+.header__user .dropdown {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  background: #31333f;
+  padding: 10px 0;
+  width: 200px;
+  border-radius: 15px;
+  transition: 0.5s;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.header__user .dropdown.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.header__user .dropdown:before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #31333f;
+  top: -7px;
+  right: 30px;
+  transform: rotate(45deg);
+}
+
+.header__user .dropdown h3 {
+  color: white;
+  width: 100%;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1rem;
+}
+
+.header__user .dropdown h4 {
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-align: center;
+  line-height: 0.5rem;
+}
+
+.header__user .dropdown ul {
+  padding: 0;
+}
+
+.header__user .dropdown ul li {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid #ca802b;
+  width: 100%;
+}
+
+.header__user .dropdown ul li i {
+  color: white;
+  margin-right: 20px;
+  opacity: 0.5;
+  transition: 0.5;
+}
+
+.header__user .dropdown ul li:hover i {
+  opacity: 1;
+}
+
+.header__user .dropdown ul li a {
+  transition: 0.5s;
+}
+
+.header__user .dropdown ul li:hover a {
+  color: #d61f2b;
+}
+
+.overlay {
+  opacity: 0;
+  position: fixed;
+  top: 3.5625rem;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-image: linear-gradient(black, transparent);
+}
+
+.sidebar {
+  min-height: 100%;
+  background-color: #31333f;
+}
+
+.sidebar .sidebar__menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 250px;
+  text-align: center;
+}
+
+.sidebar .sidebar__menu li {
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.sidebar .sidebar__menu li:hover {
+  background-color: coral;
+}
+
+.sidebar .sidebar__menu a {
+  color: white;
+  user-select: none;
+}
+
+.login {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #3f3d57;
+  transition: 0.5s ease-in-out;
+}
+
+.login.active {
+  background: #ca802b;
+}
+
+.login__container {
+  position: relative;
+  width: 800px;
+  height: 500px;
+  margin: 20px;
+}
+
+.login__container-bgColor {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 40px;
+  width: 100%;
+  height: 420px;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 5px 45px rgba(0, 0, 0, 0.15);
+}
+
+.login__box {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.login__box h2 {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.login__box button {
+  cursor: pointer;
+  padding: 10px 20px;
+  color: #3f3d57;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
+}
+
+.login__box.signin button:hover {
+  background: #ca802b;
+  box-shadow: 0 5px 25px #3f3d57;
+  color: white;
+}
+
+.login__box.signup button:hover {
+  box-shadow: 0 5px 25px #ca802b;
+  background: #3f3d57;
+  color: white;
+}
+
+.login__form {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: white;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px 40px rgba(0, 0, 0, 0.25);
+  transition: 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+.login__form.active {
+  left: 50%;
+}
+
+.login__form.active .signinForm {
+  left: -100%;
+  transition-delay: 0s;
+}
+
+.login__form.active .signupForm {
+  left: 0% !important;
+  transition-delay: 0s;
+}
+
+.login__form .signupForm {
+  left: 100% !important;
+  transition-delay: 0.25s !important;
+}
+
+.login__form .signupForm input[type=button]:hover {
+  box-shadow: 0 5px 25px #ca802b;
+}
+
+.login__form .signinForm {
+  transition-delay: 0.25s !important;
+}
+
+.login__form .signinForm input[type=button]:hover {
+  box-shadow: 0 5px 25px #3f3d57;
+}
+
+.login__form .form {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  padding: 50px;
+  transition: 0.5s;
+}
+
+.login__form .form form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.login__form .form form h3 {
+  font-size: 1.5rem;
+  color: #3f3d57;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.login__form .form form input {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 10px;
+  outline: none;
+  font-size: 1.2rem;
+  border: 1px solid #3f3d57;
+}
+
+.login__form .form form input[type="button"] {
+  background: #3f3d57;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  max-width: 100px;
+  cursor: pointer;
+}
+
+.login__form .form form span {
+  background: #D71F2A;
+  padding: 10px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.login__form .form.signupForm input[type="button"] {
+  background: #ca802b;
+}
+
+.notfound {
+  background: #d61f2b;
+  width: 100vw;
+  height: 100vh;
+}
+
+.notfound .content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.notfound .content .img img {
+  object-fit: cover;
+}
+
+.notfound .content h1 {
+  color: white;
+  text-transform: uppercase;
+}
+
+.notfound .content a {
+  width: 100%;
+  color: white;
+  text-align: center;
+}
+/*# sourceMappingURL=style.css.map */

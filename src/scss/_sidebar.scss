@@ -1,0 +1,32 @@
+.sidebar {
+    // border-right: 1px black solid;
+    min-height: 100%;
+    background-color: $bg-black;
+    .sidebar__menu {
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 250px;
+            text-align: center;
+        }
+
+        li {
+            padding: 1rem;
+            cursor: pointer;
+
+            &:hover {
+                // background-color: #D71F2A;
+                background-color: coral;
+                a {
+                    // color: white;
+                }
+            }
+        }
+
+        a {
+            color: white;
+            user-select: none;
+        }
+    }
+}
