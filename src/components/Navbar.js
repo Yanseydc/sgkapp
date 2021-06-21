@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useHistory } from 'react-router-dom';
-import useStore from './../state/jwtState';
+import { useTokenStore } from './../state/jwtState';
 
 function NavBar() {
     const history = useHistory();
-    const clearToken = useStore(state => state.clearJwt);    
+    const removeToken = useTokenStore(state => state.removeToken);    
 
     const [hamburguerFlag, setHamburguerFlag] = useState(false);
     const hambuguerRef = useRef(null);
@@ -12,9 +12,10 @@ function NavBar() {
 
     useEffect(() => {
         const hamburguer = document.querySelector('#hamburguer');
-        const userDropdown = document.querySelector('#user-dropdown');
+        const userDropdown = document.querySelector('#user-dropdown');        
+
         hamburguer.addEventListener("click", toggle);
-        userDropdown.addEventListener('click', userDropDownToggle);
+        userDropdown.addEventListener('click', userDropDownToggle);        
     },[])
 
     const toggle = () => {
@@ -33,8 +34,7 @@ function NavBar() {
             fadeElements.forEach(elem => {
                 elem.classList.add('fade-out');
                 elem.classList.remove('fade-in');;
-            });
-            
+            });            
         }
     }
 
@@ -44,7 +44,7 @@ function NavBar() {
     };
 
     const logOut = () => {
-        clearToken();
+        removeToken();
         history.push('/login');
     }
 

@@ -6,24 +6,22 @@ import {
 } from "react-router-dom";
 import Home from './pages/Home';
 import LogIn from "./pages/LogIn";
-import AddMember from "./pages/AddMember";
-import Header from './components/Header'
-import SideBar from "./components/SideBar";
+import AddClient from "./pages/AddClient";
 import NotFound from "./pages/NotFound";
 import { Fragment } from "react";
-import useStore from './state/jwtState';
+import { useTokenStore } from './state/jwtState';
+import Layout from "./components/Layout";
 
 function App() {  
+
+  const jwt = useTokenStore(state => state.jwt);   
   
-  const getJwt = useStore(state => state.jwt);   
-  console.log('app', getJwt);
-  function PrivateRoute({ component: Component, ...rest }) {  
-    console.log('component', Component)  
+  function PrivateRoute({ component: Component, ...rest }) {      
     return (
       <Route
         {...rest}
         render={props =>
-          getJwt ? (
+          jwt ? (
             <Component {...props} />
           ) : (
             <Redirect
@@ -41,20 +39,14 @@ function App() {
   return (
     <Fragment>
       <Router>
-        <div className="app">
-          { getJwt ? <Header /> : ''}
-          <div className="app__content flex">
-            { getJwt ? <SideBar /> : '' }
+        <Layout>        
             <Switch>
               <PrivateRoute path="/" exact component={Home} / >                
-              <PrivateRoute path="/addMember" component={AddMember} />              
+              <PrivateRoute path="/addClient" component={AddClient} />              
               <Route path="/login"><LogIn /></Route>
               <Route><NotFound /></Route>
-              
-              {/* <Redirect to="/404" /> */}
-            </Switch>        
-          </div>
-        </div>
+            </Switch>                  
+        </Layout>
       </Router>
     </Fragment>
   );

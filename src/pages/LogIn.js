@@ -1,14 +1,14 @@
 import axios from "axios";
-import useStore from './../state/jwtState';
+import { useTokenStore } from './../state/jwtState';
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 
 
 const LogIn = () => {
-    const jwt = useStore(state => state.setJwt); 
-    const getJwt = useStore(state => state.jwt); 
-
-    let [signinForm, setSigninForm] =  useState({
+    const addToken = useTokenStore(state => state.addToken); 
+    const getJwt = useTokenStore( (state) => state.jwt); 
+    
+    let [signinForm, setSigninForm] = useState({
         username: '',
         password: ''
     });
@@ -27,28 +27,26 @@ const LogIn = () => {
     
     const history = useHistory();
     
-    useEffect(() => {    
-        console.log('getJwt', getJwt, getJwt ? true : false)     
-        if(getJwt) {
-            console.log('history push')
+    useEffect(() => {            
+        if(getJwt) {            
             history.push("/")
+        } else {
+            const signUpBtn = document.querySelector('.signup-btn');
+            const signInBtn = document.querySelector('.signin-btn');
+            const form = document.querySelector('.login__form');
+            const login = document.querySelector('.login');
+
+            signUpBtn.addEventListener('click', function() {
+                form.classList.add('active');
+                login.classList.add('active');
+            });
+
+            signInBtn.addEventListener('click', function() {
+                form.classList.remove('active');
+                login.classList.remove('active');
+            });
         }
-        const signUpBtn = document.querySelector('.signup-btn');
-        const signInBtn = document.querySelector('.signin-btn');
-        const form = document.querySelector('.login__form');
-        const login = document.querySelector('.login');
-
-        signUpBtn.addEventListener('click', function() {
-            form.classList.add('active');
-            login.classList.add('active');
-        });
-
-        signInBtn.addEventListener('click', function() {
-            form.classList.remove('active');
-            login.classList.remove('active');
-        });
-
-    }, []);
+    });
 
     const handleInputEventSignin = (e) => {
         setSigninError({...signInError, hasError: false});
@@ -70,15 +68,21 @@ const LogIn = () => {
             const { username, password } = signinForm;
             const response = await axios.post("http://localhost:4000/api/auth/signin", {username, password});
             const { token } = response.data;
-
-            jwt(token);
-
-            history.push('/');
             
+            localStorage.setItem("jwt", token);
+            
+            addToken(token);
+
+            history.push('/');            
 
         } catch(error) {
-            const { message } = error.response.data ;
-            console.log(error.response);
+            let message;
+            if(error.response) {
+                message = error.response.data.message ;                
+            } else {
+                message = 'El servidor esta apagado'                
+            }
+
             setSigninError({
                 ...signInError,
                 message,
@@ -92,21 +96,18 @@ const LogIn = () => {
             const { username, email, password } = signupForm;
             const response = await axios.post("http://localhost:4000/api/auth/signin", {
                 username, email, password
-            })
-
-            console.log('response: ', response);
-
+            });
         } catch(error)  {
             console.log('singup error', error);
         }
     }
 
     const handleKeyDown = (e) => {        
-        if(e.keyCode == 13) {
+        if(e.keyCode === 13) {
             const keys = Object.keys(signinForm); //get keys
             //loop through object to validate values
             for(let i in keys) {                
-                if(signinForm[keys[i]] == '') {
+                if(signinForm[keys[i]] === '') {
                     setSigninError({...signInError, hasError: true, message: "Los campos no pueden ir vacios"})
                     return;
                 }
@@ -150,6 +151,7 @@ const LogIn = () => {
                             <input type="password" name="confirmPassword" value={signupForm.confirmPassword} placeholder="Confirmar Contraseña" onChange={handleInputEventSignup}/>
                             <input type="button" onClick={signUp} value="Registrar" onChange={handleInputEventSignup}/> 
                         </form>
+                        
                     </div>
                 </div>            
             </div>

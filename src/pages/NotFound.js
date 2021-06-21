@@ -8,7 +8,7 @@ const NotFound = () => {
                 </div>
                 
                 <h1>Esta pagina no existe Gorila!</h1>
-                <a href="/login">Regresa a inicio de sesion</a>
+                <a href="/login">Click para regresar</a>
             </div>
         </div>
     )

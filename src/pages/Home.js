@@ -1,27 +1,162 @@
-// import useStore from './../components/TheRedux'
+import axios from 'axios';
+import {  useEffect, useMemo, useState } from 'react';
+import { useTable } from 'react-table'
+import { useTokenStore } from './../state/jwtState'
+
+
+function Table({ columns, data }) {
+
+    const { 
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+      } = useTable({ 
+        columns, 
+        data , 
+        initialState: {
+          hiddenColumns: ["_id"]
+        }})
+
+    return (
+        <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th
+                  {...column.getHeaderProps()}
+                  style={{
+                    borderBottom: 'solid 3px red',
+                    background: 'hsl(231, 12%, 22%)',
+                    color: 'white',                    
+                    fontWeight: '500',
+                    padding: '1rem'
+                    
+                  }}
+                >
+                  {column.render('Header')}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map(row => {
+            prepareRow(row)
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return (
+                    <td
+                      {...cell.getCellProps()}
+                      style={{
+                        padding: '10px',
+                        border: 'solid 1px gray',
+                        // background: 'papayawhip',
+                      }}
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  )
+                })}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>    
+    )
+}
 
 function Home() {
-    // const counter = useStore(state => state.counter);
-    // const increment = useStore(state => state.increment);
-    // const decrement = useStore(state => state.decrement);
-    // const clear = useStore(state => state.clearCounter);
+    const [fetchedData, setFechedData] =  useState([]);    
+    const [loading, setLoading] = useState(true);
+    const getJwt = useTokenStore( (state) => state.jwt);
 
+    useEffect( () => {              
+        if(loading) {
+            getData();
+        }
+    })
+
+    const getData = async () => {
+        try {
+            const response = await axios.get("http://localhost:4000/api/Clients");            
+            createClient(response);                        
+        } catch (error) {
+            console.error('error', error);
+        }
+    };
+
+    const createClient = ({data}) => {
+        const clients = data.map(client => {
+            return {...client, status: '🔴', register: 'Entrada', action: 'ver' };
+        });
+        
+        setFechedData(clients);
+        setLoading(false);
+    }
+
+    const checkIn = async (clientId) => {
+      try {        
+        const options = {
+          method: 'POST',
+          headers: { 
+            'content-type': 'application/json',
+            'x-access-token': getJwt
+          },
+          data: { clientId },
+          url: 'http://localhost:4000/api/clients/checkIn'
+        };
+        const response = await axios(options);
+        console.log(response);
+      } catch (error) {
+        console.error('error', error);
+      }
+    };
+
+    const columns = useMemo( (props) => [
+        { 
+          Header: 'ID',
+          accessor: '_id',          
+        }, {
+            Header: 'Nombre',
+            accessor: 'name', // accessor is the "key" in the data
+        }, {
+            Header: 'Apellido',
+            accessor: 'lastName',
+        }, {
+            Header: 'Fecha Proxima Pago',
+            accessor: 'birthDate',
+        }, {
+            Header: 'Status',
+            accessor: 'status'
+        }, {
+            Header: 'Registrar',
+            accessor: 'register',
+            Cell: ({ cell }) => (                              
+                <button className="button red" onClick={ () => {checkIn(cell.row.values._id)} }>{cell.row.values.register}</button>
+            )
+        }, {
+            Header: 'Accion',
+            accessor: 'action',
+            Cell: ({ cell }) => (                
+                <button className="button blue"><i className="fas fa-eye"></i></button>
+            )
+        }
+    ], [])
     return(
-        <div className="container">
-            <h1>I'm Home edition</h1>     
-            {/* <h2>counter: {counter} </h2>
-            <button onClick={increment} >Increment +</button>
-            <button onClick={decrement} >Decrement -</button>
-            <button onClick={ () => clear(200)}>Clear</button> */}
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Augue lacus viverra vitae congue eu. Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Turpis in eu mi bibendum. Nulla at volutpat diam ut venenatis tellus in metus. Urna nunc id cursus metus. Erat pellentesque adipiscing commodo elit at imperdiet. Amet justo donec enim diam vulputate ut pharetra. Lorem mollis aliquam ut porttitor leo a. At consectetur lorem donec massa sapien faucibus et molestie ac. Donec et odio pellentesque diam volutpat commodo sed egestas. Tristique senectus et netus et. Sed risus pretium quam vulputate dignissim. Egestas quis ipsum suspendisse ultrices. Non blandit massa enim nec dui nunc. Nullam ac tortor vitae purus faucibus. Vitae suscipit tellus mauris a diam maecenas.
-
-                Nisl rhoncus mattis rhoncus urna neque viverra. Mi proin sed libero enim sed faucibus turpis in eu. Cras sed felis eget velit aliquet sagittis id. Tempor nec feugiat nisl pretium. Aliquet nec ullamcorper sit amet risus nullam eget. Cursus euismod quis viverra nibh cras. Netus et malesuada fames ac turpis egestas. Nibh venenatis cras sed felis eget velit aliquet. Dignissim diam quis enim lobortis scelerisque fermentum dui. Sed euismod nisi porta lorem mollis. Libero id faucibus nisl tincidunt eget. Convallis a cras semper auctor neque vitae tempus quam pellentesque. Mus mauris vitae ultricies leo. Ut sem viverra aliquet eget. Volutpat est velit egestas dui. Sem nulla pharetra diam sit amet nisl suscipit adipiscing bibendum.
-
-                Scelerisque fermentum dui faucibus in ornare quam. Auctor neque vitae tempus quam pellentesque nec nam aliquam sem. Pharetra convallis posuere morbi leo urna molestie at elementum. Dignissim enim sit amet venenatis urna cursus eget. Aenean euismod elementum nisi quis eleifend quam. Aliquet lectus proin nibh nisl condimentum. Hendrerit gravida rutrum quisque non tellus. Etiam erat velit scelerisque in. Ridiculus mus mauris vitae ultricies leo. Mauris vitae ultricies leo integer malesuada nunc vel risus. Aenean euismod elementum nisi quis eleifend quam adipiscing vitae proin. Pellentesque habitant morbi tristique senectus et netus et malesuada. Accumsan sit amet nulla facilisi morbi tempus iaculis urna. Elementum tempus egestas sed sed risus pretium quam. Faucibus turpis in eu mi bibendum neque egestas congue. Pretium nibh ipsum consequat nisl vel. Quisque id diam vel quam. Nunc id cursus metus aliquam. Cum sociis natoque penatibus et magnis dis parturient montes. Pharetra et ultrices neque ornare aenean euismod elementum nisi.
-
-            </p>
-        </div>
+        // <div className="container">
+            <div className="table">
+                <div className="table__content">
+                    { loading 
+                        ? <p>Loading......</p>
+                        : <Table columns={columns} data={fetchedData} />       
+                    }
+                </div>
+            </div>
+        // </div>
     );
 }
 

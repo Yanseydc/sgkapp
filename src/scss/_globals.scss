@@ -52,13 +52,24 @@ a, a:hover, a:visited {
 
 //buttons
 .button {
-    padding: 0.875rem 2.1875rem;
-    border-radius: 50px;
-    cursor: pointer;
-    background: linear-gradient(to right, red, coral);
+    padding: 0.6rem 1.5rem;
+    border-radius: 20px;
+    cursor: pointer;    
     color: white;
     border: 0;
-    font-weight: 400;    
+    font-weight: 400;  
+
+    &.red {
+        background: linear-gradient(to right, red, coral);
+    }
+
+    &.blue {
+        background: #187bcd;//linear-gradient(to right, cyan, blue);
+    }
+
+    &:hover {
+        box-shadow: 0 5px 25px rgba(0,0,0,1);
+    }
 }
 
 .hide-for-mobile {

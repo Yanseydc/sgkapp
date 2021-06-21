@@ -1,12 +1,12 @@
 import create from 'zustand';
-import { persist } from 'zustand/middleware'
+import { devtools } from 'zustand/middleware'
 
-const useStore = create( persist(
-    (set, get) => ({
-        jwt: null,
-        setJwt: (token) => set( () => ({ jwt: token })), 
-        clearJwt: () => set({ jwt: '' })
-    })
-));
+let tokenStore = (set) => ({
+    jwt: localStorage.getItem("jwt"),
+    addToken: () => set( () => ({ jwt: localStorage.getItem("jwt") }) ),
+    removeToken: () => set( () => ({ jwt: localStorage.clear() }) )
+});
 
-export default useStore;
+tokenStore = devtools(tokenStore);
+
+export const useTokenStore = create(tokenStore);
