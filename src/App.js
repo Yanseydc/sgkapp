@@ -9,8 +9,10 @@ import LogIn from "./pages/LogIn";
 import AddClient from "./pages/AddClient";
 import NotFound from "./pages/NotFound";
 import { Fragment } from "react";
-import { useTokenStore } from './state/jwtState';
+import { useTokenStore } from './state/StateManager';
 import Layout from "./components/Layout";
+import Payment from "./pages/Payment";
+import ViewClient from "./pages/ViewClient";
 
 function App() {  
 
@@ -42,7 +44,9 @@ function App() {
         <Layout>        
             <Switch>
               <PrivateRoute path="/" exact component={Home} / >                
-              <PrivateRoute path="/addClient" component={AddClient} />              
+              <PrivateRoute path="/addClient" component={AddClient} />
+              <PrivateRoute path="/payment/:id" component={Payment} />
+              <PrivateRoute path="/viewClient" component={ViewClient} />
               <Route path="/login"><LogIn /></Route>
               <Route><NotFound /></Route>
             </Switch>                  

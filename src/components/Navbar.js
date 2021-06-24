@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useHistory } from 'react-router-dom';
-import { useTokenStore } from './../state/jwtState';
+import { useTokenStore } from '../state/StateManager';
 
 function NavBar() {
     const history = useHistory();
@@ -52,7 +52,7 @@ function NavBar() {
         <header className={`header ${hamburguerFlag ? 'open': ''}`}>
             <div className="overlay has-fade"></div>
             <nav className="container flex flex-jc-sb flex-ai-c">
-                <a href="#!" className="header__logo" onClick={() => { history.push('/')}}>
+                <a href="/" className="header__logo" onClick={() => { history.push('/')}}>
                     {/* <img src="" alt="sgk" /> */}
                     {`<SGK />`}
                 </a>

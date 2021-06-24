@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useTokenStore } from './../state/jwtState';
+import { useTokenStore } from '../state/StateManager';
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 

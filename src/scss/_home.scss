@@ -2,13 +2,60 @@
     width: 100%;    
     height: 100%;
     padding: 5rem;
+    text-align: center;
 
     &__content {
         display: flex;
         justify-content: center;
-        align-items: start;
+        align-items: flex-start;
         width: 100%;    
         height: 100%;        
     }
     
+}
+
+.actions {
+    // padding: 0.4rem 1rem;
+    // border-radius: 20px;
+    // cursor: pointer;    
+    // color: white;
+    // border: 0;
+    // font-weight: 400; 
+    font-size: 1.5rem;   
+
+    i {
+        cursor: pointer;
+        transition: 0.2s;
+        &:hover {
+            color: black;
+        }
+    }
+
+    .checkIn {
+        color: $bg-red;
+    }
+
+    .view {
+        color: #187bcd;//linear-gradient(to right, cyan, blue);        
+    }
+
+    .pay {
+        color: green;        
+    }
+
+    &.red {
+        background: linear-gradient(to right, red, coral);
+    }
+
+    &.blue {
+        background: #187bcd;//linear-gradient(to right, cyan, blue);
+    }
+
+    &.green {
+        background: green;
+    }
+
+    // &:hover {
+    //     box-shadow: 0 5px 25px rgba(0,0,0,1);
+    // }
 }

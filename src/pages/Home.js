@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {  useEffect, useMemo, useState } from 'react';
 import { useTable } from 'react-table'
-import { useTokenStore } from './../state/jwtState'
-
+import { useTokenStore } from '../state/StateManager'
+import { Link } from "react-router-dom";
 
 function Table({ columns, data }) {
 
@@ -16,11 +16,12 @@ function Table({ columns, data }) {
         columns, 
         data , 
         initialState: {
-          hiddenColumns: ["_id"]
+          hiddenColumns: ["_id", "lastName"]
         }})
 
     return (
-        <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+        <table {...getTableProps()}> 
+        {/* style={{ border: 'solid 2px black' }} */}
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -28,12 +29,12 @@ function Table({ columns, data }) {
                 <th
                   {...column.getHeaderProps()}
                   style={{
-                    borderBottom: 'solid 3px red',
+                    borderBottom: 'solid 1px black',
                     background: 'hsl(231, 12%, 22%)',
                     color: 'white',                    
                     fontWeight: '500',
-                    padding: '1rem'
-                    
+                    padding: '1rem',
+                    width: '250px'
                   }}
                 >
                   {column.render('Header')}
@@ -51,11 +52,7 @@ function Table({ columns, data }) {
                   return (
                     <td
                       {...cell.getCellProps()}
-                      style={{
-                        padding: '10px',
-                        border: 'solid 1px gray',
-                        // background: 'papayawhip',
-                      }}
+                      style={{ padding: '10px', border: 'solid 1px gray'}}
                     >
                       {cell.render('Cell')}
                     </td>
@@ -73,17 +70,17 @@ function Home() {
     const [fetchedData, setFechedData] =  useState([]);    
     const [loading, setLoading] = useState(true);
     const getJwt = useTokenStore( (state) => state.jwt);
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
     useEffect( () => {              
         if(loading) {
             getData();
         }
-    })
+    },[])
 
     const getData = async () => {
-        try {
-            const response = await axios.get("http://localhost:4000/api/Clients");            
-            createClient(response);                        
+        try {                        
+            createClient(await axios.get("http://localhost:4000/api/clients"));
         } catch (error) {
             console.error('error', error);
         }
@@ -91,7 +88,7 @@ function Home() {
 
     const createClient = ({data}) => {
         const clients = data.map(client => {
-            return {...client, status: '🔴', register: 'Entrada', action: 'ver' };
+            return {...client, register: 'Entrada', action: 'ver' };
         });
         
         setFechedData(clients);
@@ -109,43 +106,118 @@ function Home() {
           data: { clientId },
           url: 'http://localhost:4000/api/clients/checkIn'
         };
-        const response = await axios(options);
-        console.log(response);
+
+        await axios(options);
+        
       } catch (error) {
         console.error('error', error);
       }
     };
 
-    const columns = useMemo( (props) => [
+    const columns = useMemo( () => [
         { 
           Header: 'ID',
           accessor: '_id',          
         }, {
             Header: 'Nombre',
-            accessor: 'name', // accessor is the "key" in the data
+            accessor: 'firstName', // accessor is the "key" in the data
+            Cell: ({ cell }) => {
+              const { firstName, lastName } = cell.row.values;
+              return `${firstName} ${lastName}`;
+            }
         }, {
             Header: 'Apellido',
             accessor: 'lastName',
         }, {
-            Header: 'Fecha Proxima Pago',
-            accessor: 'birthDate',
+            Header: 'Fechas',
+            columns: [
+              {
+                Header: 'Ultimo pago',
+                accessor: 'lastPayment',
+                Cell: ({ cell }) => {
+                  let lastPayment = cell.row.values.lastPayment;
+                  if(lastPayment) {
+                    return new Date(`${lastPayment}`).toLocaleDateString('es-Es', dateOptions);
+                  }
+                  return 'Registrar pago';
+                }
+              }, {
+                Header: 'Siguiente Pago',
+                Cell: ({ cell }) => {                       
+                  const { lastPayment, plan } = cell.row.values;
+
+                  if(lastPayment) {                         
+                    var date1 = new Date(`${lastPayment}`);                  
+                    var nextPayment = date1.setMonth( date1.getMonth() + plan.quantity);
+                    var date2 = new Date(nextPayment);
+                    return `${date2.toLocaleDateString('es-Es', dateOptions)}`;
+                  }
+                  return '----';
+                }
+              }
+            ]
         }, {
+            Header: 'Plan',
+            accessor: 'plan',
+            Cell: ({ cell }) => {
+              let  plan = cell.row.values.plan
+              if(plan) {
+                return plan.name;
+              }
+              return '';
+            }
+        },{
             Header: 'Status',
-            accessor: 'status'
-        }, {
-            Header: 'Registrar',
-            accessor: 'register',
-            Cell: ({ cell }) => (                              
-                <button className="button red" onClick={ () => {checkIn(cell.row.values._id)} }>{cell.row.values.register}</button>
-            )
-        }, {
-            Header: 'Accion',
-            accessor: 'action',
-            Cell: ({ cell }) => (                
-                <button className="button blue"><i className="fas fa-eye"></i></button>
-            )
-        }
-    ], [])
+            Cell: () => { return '🟢';}        
+        },{
+            Header: 'Acciones',
+            columns: [
+              {
+                Header: 'Registrar Entrada',                
+                Cell: ({ cell }) => {
+                  const { lastPayment } = cell.row.values;
+                  if(lastPayment) {
+                    return <div className="actions"><i onClick={ () => {checkIn(cell.row.values._id)} } className="fas fa-calendar-check checkIn"></i></div>;
+                  } 
+                  
+                  return <div className="actions"><i className="fas fa-calendar-check"  style={{color: 'gray', cursor: 'not-allowed'}}></i></div>;
+                  
+                }
+              }, {
+
+                Header: 'Detalles Cliente',                
+                Cell: ({ cell }) => (<Link
+                    to="/viewClient"
+                  >
+                    <div className="actions"><i className="fas fa-eye view"></i></div>
+                  </Link>)              
+              }, {
+                Header: 'Realizar Pago',                
+                Cell: ({ cell }) => {
+                  const { lastPayment, plan } = cell.row.values;
+
+                  if(lastPayment) {                         
+                    let date1 = new Date(`${lastPayment}`);                  
+                    let nextPayment = date1.setMonth( date1.getMonth() + plan.quantity);
+                    let date2 = new Date(nextPayment).getTime();
+                    let actualDate = new Date().getTime();                    
+                    if(actualDate < date2) {                    
+                      return <div className="actions"><i style={{color: 'gray', cursor: 'not-allowed'}} className="fas fa-money-bill-alt"></i></div>                      
+                    }                     
+                  }
+                  
+                  let id = cell.row.values._id;
+                  return (
+                    <Link to={`/payment/${id}`}>
+                      <div className="actions"><i className="fas fa-money-bill-alt pay"></i></div>
+                    </Link>
+                  )                  
+                }                
+              }
+            ]
+        }, 
+    ], [dateOptions])
+    
     return(
         // <div className="container">
             <div className="table">

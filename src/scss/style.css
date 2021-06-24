@@ -90,7 +90,7 @@ a, a:hover, a:visited {
 }
 
 .button {
-  padding: 0.6rem 1.5rem;
+  padding: 0.4rem 1rem;
   border-radius: 20px;
   cursor: pointer;
   color: white;
@@ -104,6 +104,10 @@ a, a:hover, a:visited {
 
 .button.blue {
   background: #187bcd;
+}
+
+.button.green {
+  background: green;
 }
 
 .button:hover {
@@ -120,6 +124,10 @@ a, a:hover, a:visited {
   .hide-for-desktop {
     display: none;
   }
+}
+
+.textCenter {
+  text-align: center;
 }
 
 .app__content {
@@ -567,28 +575,67 @@ a, a:hover, a:visited {
   width: 100%;
   height: 100%;
   padding: 5rem;
+  text-align: center;
 }
 
 .table__content {
   display: flex;
   justify-content: center;
-  align-items: start;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
 }
 
-.addClient {
+.actions {
+  font-size: 1.5rem;
+}
+
+.actions i {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.actions i:hover {
+  color: black;
+}
+
+.actions .checkIn {
+  color: #d61f2b;
+}
+
+.actions .view {
+  color: #187bcd;
+}
+
+.actions .pay {
+  color: green;
+}
+
+.actions.red {
+  background: linear-gradient(to right, red, coral);
+}
+
+.actions.blue {
+  background: #187bcd;
+}
+
+.actions.green {
+  background: green;
+}
+
+.addClient, .payment {
+  transition: 0.5s;
   width: 60%;
   height: 100%;
   margin: auto;
 }
 
-.addClient__container {
+.addClient__container, .payment__container {
   width: 100%;
   padding: 2rem;
 }
 
-.addClient__container .form {
+.addClient__container .form, .payment__container .form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -598,25 +645,25 @@ a, a:hover, a:visited {
   height: 100%;
 }
 
-.addClient__container .form .row {
+.addClient__container .form .row, .payment__container .form .row {
   width: 100%;
   position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
-.addClient__container .form .row .col {
+.addClient__container .form .row .col, .payment__container .form .row .col {
   position: relative;
   width: 100%;
   padding: 0 10px;
   margin: 20px 0 10px;
 }
 
-.addClient__container .form .row .col .form-input label {
+.addClient__container .form .row .col .form-input label, .payment__container .form .row .col .form-input label {
   display: block;
 }
 
-.addClient__container .form .row .col .form-input input, .addClient__container .form .row .col select {
+.addClient__container .form .row .col .form-input input, .addClient__container .form .row .col select, .payment__container .form .row .col .form-input input, .payment__container .form .row .col select {
   display: block;
   width: 100%;
   outline: none;
@@ -624,5 +671,18 @@ a, a:hover, a:visited {
   font-size: 1.3rem;
   font-weight: 500;
   padding: 0.5rem;
+}
+
+.addClient__container .form .btn, .payment__container .form .btn {
+  width: 200px;
+  background-color: #3f3d57;
+  padding: 1rem;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.addClient__container .form .btn:hover, .payment__container .form .btn:hover {
+  box-shadow: 0 5px 25px black;
 }
 /*# sourceMappingURL=style.css.map */
