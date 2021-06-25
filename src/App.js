@@ -46,7 +46,7 @@ function App() {
               <PrivateRoute path="/" exact component={Home} / >                
               <PrivateRoute path="/addClient" component={AddClient} />
               <PrivateRoute path="/payment/:id" component={Payment} />
-              <PrivateRoute path="/viewClient" component={ViewClient} />
+              <PrivateRoute path="/viewClient/:id" component={ViewClient} />
               <Route path="/login"><LogIn /></Route>
               <Route><NotFound /></Route>
             </Switch>                  

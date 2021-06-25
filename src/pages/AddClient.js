@@ -57,66 +57,65 @@ function AddMember() {
 
     return (
         <div className="addClient">
-            <div className="addClient__container">
-                {/* <div className="addClient__form"> */}
-                    <div className="form">
-                        <h1>Agregar Cliente</h1>
-                        <div className="row">
-                            <div className="col">
-                                <div className="form-input">
-                                    <label htmlFor="firstName">Nombre:</label>
-                                    <input id="firstName" type="text" name="firstName" onChange={handleInputChange} required="required" />
-                                </div>
-                            </div>
-
-                            <div className="col">
-                                <div className="form-input">
-                                    <label htmlFor="lastName">Apellidos:</label>
-                                    <input id="lastName" type="text" name="lastName" onChange={handleInputChange} required="required" />
-                                </div>
+            <div className="addClient__container">                
+                <h1>Agregar Cliente</h1>
+                <div className="form">
+                    <div className="row">
+                        <div className="col">
+                            <div className="form-input">
+                                <label htmlFor="firstName">Nombre:</label>
+                                <input id="firstName" placeholder="Ingresa nombre(s) del cliente" type="text" name="firstName" onChange={handleInputChange} required="required" />
                             </div>
                         </div>
 
-                        <div className="row">
-                            <div className="col">
-                                <div className="form-input">
-                                    <label htmlFor="phone">Telefono:</label>
-                                    <input id="phone" type="text" name="phone" onChange={handleInputChange}/>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="form-input">
-                                    <label htmlFor="email">Correo:</label>
-                                    <input id="email" type="email" name="email" onChange={handleInputChange}/>
-                                </div>
+                        <div className="col">
+                            <div className="form-input">
+                                <label htmlFor="lastName">Apellidos:</label>
+                                <input id="lastName" type="text" name="lastName" onChange={handleInputChange} required="required" />
                             </div>
                         </div>
-
-                        <div className="row">
-                            <div className="col">
-                                <div className="form-input">
-                                    <label htmlFor="referenceName">Referencia personal:</label>
-                                    <input id="referenceName" type="text" name="referenceName" onChange={handleInputChange}/>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="form-input">
-                                    <label htmlFor="referencePhone">Telefono de referencia:</label>
-                                    <input id="referencePhone" type="text" name="referencePhone" onChange={handleInputChange}/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="row">                            
-                            <div className="col">
-                                <div className="form-input">
-                                    <label htmlFor="birthDate">Fecha de nacimiento:</label>
-                                    <input id="birthDate" type="date" name="birthDate" min="1950-01-01" max="2000-01-01" onChange={handleInputChange}/>
-                                </div>
-                            </div>
-                        </div>
-                        <button className="btn" onClick={addClient}>Guardar Cliente</button>
                     </div>
+
+                    <div className="row">
+                        <div className="col">
+                            <div className="form-input">
+                                <label htmlFor="phone">Telefono:</label>
+                                <input id="phone" type="text" name="phone" onChange={handleInputChange}/>
+                            </div>
+                        </div>
+                        <div className="col">
+                            <div className="form-input">
+                                <label htmlFor="email">Correo:</label>
+                                <input id="email" type="email" name="email" onChange={handleInputChange}/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col">
+                            <div className="form-input">
+                                <label htmlFor="referenceName">Referencia personal:</label>
+                                <input id="referenceName" type="text" name="referenceName" onChange={handleInputChange}/>
+                            </div>
+                        </div>
+                        <div className="col">
+                            <div className="form-input">
+                                <label htmlFor="referencePhone">Telefono de referencia:</label>
+                                <input id="referencePhone" type="text" name="referencePhone" onChange={handleInputChange}/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row">                            
+                        <div className="col">
+                            <div className="form-input">
+                                <label htmlFor="birthDate">Fecha de nacimiento:</label>
+                                <input id="birthDate" type="date" name="birthDate" min="1950-01-01" max="2000-01-01" onChange={handleInputChange}/>
+                            </div>
+                        </div>
+                    </div>
+                    <button className="btn" onClick={addClient}>Guardar Cliente</button>
+                </div>
             </div>
         </div>
     );    

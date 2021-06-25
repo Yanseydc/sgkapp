@@ -15,12 +15,9 @@
 }
 
 .actions {
-    // padding: 0.4rem 1rem;
-    // border-radius: 20px;
-    // cursor: pointer;    
-    // color: white;
-    // border: 0;
-    // font-weight: 400; 
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     font-size: 1.5rem;   
 
     i {
@@ -32,7 +29,7 @@
     }
 
     .checkIn {
-        color: $bg-red;
+        color: green;
     }
 
     .view {
@@ -40,22 +37,54 @@
     }
 
     .pay {
-        color: green;        
+        color: green;
     }
 
-    &.red {
-        background: linear-gradient(to right, red, coral);
+    .remove {
+        color: $bg-red;
+    }
+}
+
+.btn-payment {
+    background: green;
+    width: 168px;
+    height: 31px;
+    margin: auto;
+    color: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    &:hover {
+
+        background: black;
+    }
+}
+
+.status {
+    border: 1px solid;
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 100px;
+    margin: auto;
+    padding: 0.1rem;
+
+    &.active {        
+        border-color: green;
+        color: green        
     }
 
-    &.blue {
-        background: #187bcd;//linear-gradient(to right, cyan, blue);
+    &.expired {
+        border-color: $bg-red;
+        color: $bg-red;
     }
 
-    &.green {
-        background: green;
+    &.pending {
+        border-color: $bg-mustard;
+        color: $bg-mustard;
     }
-
-    // &:hover {
-    //     box-shadow: 0 5px 25px rgba(0,0,0,1);
-    // }
 }

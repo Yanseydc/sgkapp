@@ -3,6 +3,7 @@ import {  useEffect, useMemo, useState } from 'react';
 import { useTable } from 'react-table'
 import { useTokenStore } from '../state/StateManager'
 import { Link } from "react-router-dom";
+// import matchSorter from 'match-sorter'
 
 function Table({ columns, data }) {
 
@@ -115,10 +116,9 @@ function Home() {
     };
 
     const columns = useMemo( () => [
-        { 
-          Header: 'ID',
-          accessor: '_id',          
-        }, {
+        { accessor: '_id' },        
+        { accessor: 'lastName' },
+        {
             Header: 'Nombre',
             accessor: 'firstName', // accessor is the "key" in the data
             Cell: ({ cell }) => {
@@ -126,95 +126,64 @@ function Home() {
               return `${firstName} ${lastName}`;
             }
         }, {
-            Header: 'Apellido',
-            accessor: 'lastName',
-        }, {
-            Header: 'Fechas',
-            columns: [
-              {
-                Header: 'Ultimo pago',
-                accessor: 'lastPayment',
-                Cell: ({ cell }) => {
-                  let lastPayment = cell.row.values.lastPayment;
-                  if(lastPayment) {
-                    return new Date(`${lastPayment}`).toLocaleDateString('es-Es', dateOptions);
-                  }
-                  return 'Registrar pago';
-                }
-              }, {
-                Header: 'Siguiente Pago',
-                Cell: ({ cell }) => {                       
-                  const { lastPayment, plan } = cell.row.values;
-
-                  if(lastPayment) {                         
-                    var date1 = new Date(`${lastPayment}`);                  
-                    var nextPayment = date1.setMonth( date1.getMonth() + plan.quantity);
-                    var date2 = new Date(nextPayment);
-                    return `${date2.toLocaleDateString('es-Es', dateOptions)}`;
-                  }
-                  return '----';
-                }
-              }
-            ]
-        }, {
-            Header: 'Plan',
-            accessor: 'plan',
+          Header: 'Fecha de registro',
+          accessor: 'lastPayment',
+          Cell: ({ cell }) => {
+            let lastPayment = cell.row.values.lastPayment;
+            let id = cell.row.values._id;
+            if(lastPayment) {
+              return new Date(`${lastPayment}`).toLocaleDateString('es-Es', dateOptions);
+            }
+            return <div className="btn-payment"><Link to={`/payment/${id}`}>+ Agregar pago</Link></div>
+          }
+        },{
+            Header: 'Estatus',
             Cell: ({ cell }) => {
-              let  plan = cell.row.values.plan
-              if(plan) {
-                return plan.name;
+              let lastPayment = cell.row.values.lastPayment;
+              let cssClass = 'active';
+              let text = 'Corriente';
+              if(!lastPayment) {
+                cssClass = "pending";
+                text = "Pendiente";
               }
-              return '';
+
+              if(lastPayment) {
+                let currentDate = new Date().getTime();
+                let registerDate = new Date(`${lastPayment}`);
+                let nextPayment = new Date(registerDate.setMonth( registerDate.getMonth() + 1)).getTime();
+                if(currentDate >= nextPayment) {
+                  cssClass = "expired";
+                  text = "Deudor";
+                }
+              }
+              return <div className={`status ${cssClass}`}>{text}</div>;
             }
         },{
-            Header: 'Status',
-            Cell: () => { return '🟢';}        
-        },{
             Header: 'Acciones',
-            columns: [
-              {
-                Header: 'Registrar Entrada',                
-                Cell: ({ cell }) => {
-                  const { lastPayment } = cell.row.values;
-                  if(lastPayment) {
-                    return <div className="actions"><i onClick={ () => {checkIn(cell.row.values._id)} } className="fas fa-calendar-check checkIn"></i></div>;
-                  } 
-                  
-                  return <div className="actions"><i className="fas fa-calendar-check"  style={{color: 'gray', cursor: 'not-allowed'}}></i></div>;
-                  
+            Cell: ({ cell }) => {
+              //check in
+              const { lastPayment } = cell.row.values;
+              let checkIn;
+                if(lastPayment) {
+                  checkIn = (
+                    <div className="actions">
+                      <i onClick={ () => {checkIn(cell.row.values._id)} } className="fas fa-calendar-check checkIn"></i>
+                      <Link to="/viewClient" ><i className="fas fa-eye view"></i></Link>
+                      <i className="fas fa-trash remove"></i>
+                    </div>
+                    
+                  )
+                } else {          
+                  checkIn = (
+                    <div className="actions">
+                      <i className="fas fa-calendar-check" style={{color: 'gray', cursor: 'not-allowed'}}></i>
+                      <Link to="/viewClient" ><i className="fas fa-eye view"></i></Link>
+                      <i className="fas fa-trash remove"></i>
+                    </div>
+                  )
                 }
-              }, {
-
-                Header: 'Detalles Cliente',                
-                Cell: ({ cell }) => (<Link
-                    to="/viewClient"
-                  >
-                    <div className="actions"><i className="fas fa-eye view"></i></div>
-                  </Link>)              
-              }, {
-                Header: 'Realizar Pago',                
-                Cell: ({ cell }) => {
-                  const { lastPayment, plan } = cell.row.values;
-
-                  if(lastPayment) {                         
-                    let date1 = new Date(`${lastPayment}`);                  
-                    let nextPayment = date1.setMonth( date1.getMonth() + plan.quantity);
-                    let date2 = new Date(nextPayment).getTime();
-                    let actualDate = new Date().getTime();                    
-                    if(actualDate < date2) {                    
-                      return <div className="actions"><i style={{color: 'gray', cursor: 'not-allowed'}} className="fas fa-money-bill-alt"></i></div>                      
-                    }                     
-                  }
-                  
-                  let id = cell.row.values._id;
-                  return (
-                    <Link to={`/payment/${id}`}>
-                      <div className="actions"><i className="fas fa-money-bill-alt pay"></i></div>
-                    </Link>
-                  )                  
-                }                
-              }
-            ]
+                return checkIn;
+            }              
         }, 
     ], [dateOptions])
     

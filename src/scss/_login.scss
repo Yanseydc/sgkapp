@@ -5,7 +5,9 @@
     align-items: center;
     background: $bg-black-light; // #D71F2A; 
     transition: 0.5s ease-in-out;
-
+    position: absolute;
+    top: -58px;
+    bottom: 0;
     &.active {
         background: $bg-mustard;
     }
@@ -172,9 +174,9 @@
 }
 
 .notfound {
-    background: $bg-red;
+    // background: $bg-red;    
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     
     .content {
         display: flex;
@@ -187,6 +189,8 @@
         .img {
             
             img {
+                width: 700px;
+                height: 500px;
                 object-fit: cover;
             }
         }
@@ -194,13 +198,13 @@
         
 
         h1 {
-            color: white;
+            // color: white;
             text-transform: uppercase;
         }
     
         a { 
             width: 100%;
-            color: white;
+            // color: white;
             text-align: center;
         }
     }    

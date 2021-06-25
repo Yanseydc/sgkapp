@@ -1,6 +1,10 @@
 .app {
-
-    &__content {
-        height: 100vh;
+    min-height: 100%;
+    &__content {        
+        position: absolute;    
+        width: 100%;
+        height: auto;
+        top: 56.7045px;
+        bottom: 0;
     }
 }

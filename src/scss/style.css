@@ -130,8 +130,16 @@ a, a:hover, a:visited {
   text-align: center;
 }
 
+.app {
+  min-height: 100%;
+}
+
 .app__content {
-  height: 100vh;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  top: 56.7045px;
+  bottom: 0;
 }
 
 .header {
@@ -268,6 +276,7 @@ a, a:hover, a:visited {
   transition: 0.5s;
   visibility: hidden;
   opacity: 0;
+  z-index: 100;
 }
 
 .header__user .dropdown.active {
@@ -347,7 +356,7 @@ a, a:hover, a:visited {
 }
 
 .sidebar {
-  min-height: 100%;
+  height: auto;
   background-color: #31333f;
 }
 
@@ -380,6 +389,9 @@ a, a:hover, a:visited {
   align-items: center;
   background: #3f3d57;
   transition: 0.5s ease-in-out;
+  position: absolute;
+  top: -58px;
+  bottom: 0;
 }
 
 .login.active {
@@ -542,9 +554,8 @@ a, a:hover, a:visited {
 }
 
 .notfound {
-  background: #d61f2b;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 }
 
 .notfound .content {
@@ -557,17 +568,17 @@ a, a:hover, a:visited {
 }
 
 .notfound .content .img img {
+  width: 700px;
+  height: 500px;
   object-fit: cover;
 }
 
 .notfound .content h1 {
-  color: white;
   text-transform: uppercase;
 }
 
 .notfound .content a {
   width: 100%;
-  color: white;
   text-align: center;
 }
 
@@ -587,6 +598,9 @@ a, a:hover, a:visited {
 }
 
 .actions {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   font-size: 1.5rem;
 }
 
@@ -600,7 +614,7 @@ a, a:hover, a:visited {
 }
 
 .actions .checkIn {
-  color: #d61f2b;
+  color: green;
 }
 
 .actions .view {
@@ -611,31 +625,86 @@ a, a:hover, a:visited {
   color: green;
 }
 
-.actions.red {
-  background: linear-gradient(to right, red, coral);
+.actions .remove {
+  color: #d61f2b;
 }
 
-.actions.blue {
-  background: #187bcd;
-}
-
-.actions.green {
+.btn-payment {
   background: green;
+  width: 168px;
+  height: 31px;
+  margin: auto;
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-payment:hover {
+  background: black;
+}
+
+.status {
+  border: 1px solid;
+  font-size: 0.9rem;
+  font-weight: 500;
+  width: 100px;
+  margin: auto;
+  padding: 0.1rem;
+}
+
+.status.active {
+  border-color: green;
+  color: green;
+}
+
+.status.expired {
+  border-color: #d61f2b;
+  color: #d61f2b;
+}
+
+.status.pending {
+  border-color: #ca802b;
+  color: #ca802b;
 }
 
 .addClient, .payment {
   transition: 0.5s;
-  width: 60%;
-  height: 100%;
-  margin: auto;
+  width: 700px;
+  height: 600px;
+  border: 1px solid black;
+  margin: 5rem auto 0 auto;
+}
+
+@media (max-width: 39.9375em) {
+  .addClient, .payment {
+    height: auto;
+  }
 }
 
 .addClient__container, .payment__container {
   width: 100%;
-  padding: 2rem;
+}
+
+.addClient__container h1, .payment__container h1 {
+  background-color: #3f3d57;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  margin: 0;
+  text-align: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 500;
 }
 
 .addClient__container .form, .payment__container .form {
+  padding: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -668,9 +737,9 @@ a, a:hover, a:visited {
   width: 100%;
   outline: none;
   height: 40px;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 500;
-  padding: 0.5rem;
+  padding: 0.8rem;
 }
 
 .addClient__container .form .btn, .payment__container .form .btn {

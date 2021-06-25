@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 const NotFound = () => {
     return(
@@ -8,7 +9,9 @@ const NotFound = () => {
                 </div>
                 
                 <h1>Esta pagina no existe Gorila!</h1>
-                <a href="/login">Click para regresar</a>
+                <Link to="/">
+                    Click para regresar
+                </Link>
             </div>
         </div>
     )
