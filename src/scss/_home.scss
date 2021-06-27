@@ -6,13 +6,45 @@
 
     &__content {
         display: flex;
-        justify-content: center;
-        align-items: flex-start;
+        // justify-content: center;
+        // align-items: center;
+        flex-direction: column;
         width: 100%;    
         height: 100%;        
     }
     
 }
+
+table {
+    // border-spacing: 0;
+    border: 1px solid black;    
+
+    tr {
+      :last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+      
+    }
+
+    th{
+        width: 100px;
+        user-select: none;
+    }
+}
+
+ .pagination {
+    padding: 0.5rem;
+ }
 
 .actions {
     display: flex;

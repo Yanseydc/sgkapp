@@ -7,18 +7,16 @@ function Payment ({ match }) {
     const jwt = useTokenStore( (state) => state.jwt );
     const loading = useAxiosStore( (state) => state.loading );
     const setLoading = useAxiosStore( (state) => state.setLoading );
-    const [plans, setPlans] = useState([]);
     const [client, setClient] = useState({});
     const [form, setForm] = useState({
         clientId,
-        plan: '',
-        newCost: '',
+        months: '',
+        cost: '',
         entryDate: ''
     });
     
     useEffect(() => {        
-        if(loading) {
-            getPlans();
+        if(loading) {            
             getClient();
         }
         //set min date
@@ -28,16 +26,7 @@ function Payment ({ match }) {
         document.querySelector("#entryDate").min = new Date(minDate).toISOString().split("T")[0];
         document.querySelector("#entryDate").max = new Date().toISOString().split("T")[0];
     }, []);
-
-    const getPlans = async () => {
-        try {
-            const res = await axios.get("http://localhost:4000/api/plans");
-            setPlans(res.data);            
-        } catch(error) {
-            console.error(" get plans error", error);
-        }
-    }
-
+    
     const getClient = async () => {
         try {                    
             const res = await axios.get(`http://localhost:4000/api/clients/${clientId}`);
@@ -55,7 +44,8 @@ function Payment ({ match }) {
         });
     };
 
-    const addPayment = async () => {
+    const addPayment = async (e) => {        
+        e.preventDefault();        
         try {            
             const options = {
                 method: 'POST',
@@ -92,43 +82,36 @@ function Payment ({ match }) {
         <div className="payment">
             <div className="payment__container">
                 <div className="form">
-                    <h1>Realizar Pago</h1>
-                    <h5>Cliente: {client.firstName} {client.lastName}</h5>
-                    <div className="row">                                            
-                        <div className="col">
-                            <div className="form-input">
-                                <label htmlFor="plan">Selecciona un plan:</label>
-                                <select name="plan" onChange={handleInputChange}>
-                                    <option>select a plan</option>
-                                    { loading 
-                                    ? <option>Loading...</option>
-                                    : plans.map( (plan) => 
-                                            <option key={plan._id} value={plan._id}>{plan.name} - {plan.cost}</option>
-                                        )
-                                    }   
-                                </select>                                
+                    <form onSubmit={addPayment}>
+                        <h1>Realizar Pago</h1>
+                        <h5>Cliente: {client.firstName} {client.lastName}</h5>
+                        <div className="row">                                            
+                            <div className="col">
+                                <div className="form-input">
+                                    <label htmlFor="months">Meses #:</label>
+                                    <input type="number" min="1" max="12" name="months" onChange={handleInputChange} placeholder="Ingrese los meses pagados" required="required"/>
+                                </div> 
+                            </div>
+
+                            <div className="col">
+                                <div className="form-input">
+                                    <label htmlFor="cost">Costo:</label>
+                                    <input type="text" name="cost" onChange={handleInputChange} placeholder="Ingrese el costo total" required="required"/>      
+                                </div>
                             </div>
                         </div>
 
-                        <div className="col">
-                            <div className="form-input">
-                                <label htmlFor="newCost">otra cantidad:</label>
-                                <input type="text" name="newCost" onChange={handleInputChange}/>      
+                        <div className="row">                            
+                            <div className="col">
+                                <div className="form-input">
+                                    <label htmlFor="entryDate">Fecha de ingreso:</label>
+                                    <input id="entryDate" type="date" name="entryDate" max="2021-07-01" onChange={handleInputChange} required="required"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="row">                            
-                        <div className="col">
-                            <div className="form-input">
-                                <label htmlFor="entryDate">Fecha de ingreso:</label>
-                                <input id="entryDate" type="date" name="entryDate" max="2021-07-01" onChange={handleInputChange}/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button className="btn" onClick={addPayment}>Guardar pago</button>
-
+                        <input type="submit" className="btn" value ="Guardar pago" />
+                    </form>
                 </div>
             </div>
         </div>

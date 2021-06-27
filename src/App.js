@@ -14,6 +14,9 @@ import Layout from "./components/Layout";
 import Payment from "./pages/Payment";
 import ViewClient from "./pages/ViewClient";
 
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+
 function App() {  
 
   const jwt = useTokenStore(state => state.jwt);   
@@ -41,6 +44,7 @@ function App() {
   return (
     <Fragment>
       <Router>
+        <ReactNotification />
         <Layout>        
             <Switch>
               <PrivateRoute path="/" exact component={Home} / >                
