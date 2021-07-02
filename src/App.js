@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound";
 import { Fragment } from "react";
 import { useTokenStore } from './state/StateManager';
 import Layout from "./components/Layout";
-import Payment from "./pages/Payment";
+import Payment from "./pages/AddPayment";
 import ViewClient from "./pages/ViewClient";
 
 import ReactNotification from 'react-notifications-component'

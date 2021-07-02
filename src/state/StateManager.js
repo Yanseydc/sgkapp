@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { devtools } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 let tokenStore = (set) => ({
     jwt: localStorage.getItem("jwt"),
@@ -11,6 +11,11 @@ let axiosStore = (set) => ({
     loading: true,
     setLoading: (value) => set( () => ({ loading: value }))
 })
+
+let userStore = (set) => ({
+    username: '',
+
+});
 
 tokenStore = devtools(tokenStore);
 axiosStore = devtools(axiosStore);

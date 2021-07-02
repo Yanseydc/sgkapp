@@ -78,11 +78,10 @@ table {
 }
 
 .btn-payment {
-    background: green;
+    background: cornflowerblue;
     width: 168px;
     height: 31px;
-    margin: auto;
-    color: white;
+    margin: auto;    
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -92,9 +91,12 @@ table {
     cursor: pointer;
     transition: 0.2s;
     &:hover {
-
         background: black;
     }
+    a {
+        color: white !important;
+    }
+
 }
 
 .status {
@@ -104,19 +106,19 @@ table {
     width: 100px;
     margin: auto;
     padding: 0.1rem;
-
+    border-radius: 5px;
     &.active {        
-        border-color: green;
-        color: green        
+        color: white;
+        background-color: green;
     }
 
-    &.expired {
-        border-color: $bg-red;
-        color: $bg-red;
+    &.expired {        
+        color: white;
+        background-color: $bg-red;
     }
 
     &.pending {
-        border-color: $bg-mustard;
-        color: $bg-mustard;
+        color: white;
+        background-color: $bg-mustard;
     }
 }

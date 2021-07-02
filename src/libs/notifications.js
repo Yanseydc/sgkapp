@@ -1,8 +1,8 @@
 import { store } from 'react-notifications-component';
 
-export const Notification = ({message, type}) => {    
+export const Notification = ({title, message, type}) => {    
     store.addNotification({
-        title: 'Exitoso',
+        title,
         message,
         type,
         insert: "top",
