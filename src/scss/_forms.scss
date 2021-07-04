@@ -1,24 +1,22 @@
-.takePhoto {
-    .content {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        gap: 20px;
-        .webcam , .image{
-            width: 300px;
-            height: auto;
-        }
+// .photo {
+//     display: flex;
+//     justify-content: space-around;
+//     align-items: center;
+//     gap: 20px;
+//     .webcam , .image{
+//         width: 300px;
+//         height: auto;
+//     }
 
-        .image {
-            object-fit: contain;
-        }
+//     .image {
+//         object-fit: contain;
+//     }
 
-        i {
-            font-size: 12rem;
-            opacity: 0.5;
-        }
-    }
-}
+//     i {
+//         font-size: 12rem;
+//         opacity: 0.5;
+//     }
+// }
 
 form {
     width: 100%;
@@ -56,6 +54,32 @@ form {
                 padding: 0.8rem ;
             }
         }
+
+        .image {
+            text-align: center;
+            img {
+                object-fit: contain;
+            }
+        }
+
+        i {
+            // font-size: 10rem;
+            opacity: 0.5;
+            text-align: center;
+        }
+
+        .webcam {
+            border: 3px solid black;
+            border-radius: 10px;
+            width: 300px;
+            background-color: $bg-black-light;
+            position: relative;
+        }
+    }
+
+    .button {
+        width: 200px !important;
+        margin: auto;
     }
 }
 

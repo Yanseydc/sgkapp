@@ -1,8 +1,11 @@
 import { useTable, useSortBy, usePagination, useFilters } from 'react-table'
 import { Filter, DefaultColumnFilter } from './filters'
+import { useClientStore } from './../../state/StateManager'
+import { useEffect } from 'react';
 
-function Table({ columns, data }) {
-
+function Table({ columns }) {
+    const data = useClientStore( (state) => state.clients);
+    
     const generateSortingIndicator = column => {
       return column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""
     }
@@ -22,9 +25,8 @@ function Table({ columns, data }) {
         pageCount,
         gotoPage,
         nextPage,
-        previousPage,        
-        // setPageSize,        
-        state: { pageIndex, pageSize },
+        previousPage,           
+        state: { pageIndex },
       } = useTable(
         { 
           columns, 
@@ -70,10 +72,6 @@ function Table({ columns, data }) {
             })}
           </tbody>
       </table>    
-       {/* 
-        Pagination can be built however you'd like. 
-        This is just a very basic UI implementation:
-      */}
       <div className="pagination">
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
@@ -105,18 +103,6 @@ function Table({ columns, data }) {
             style={{ width: '100px' }}
           />
         </span>{' '}
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Mostrar {pageSize}
-            </option>
-          ))}
-        </select> */}
       </div>
 
     </>

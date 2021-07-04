@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Box from "../components/Box/Box";
 import AddPaymentForm from "../components/AddForms/AddPaymentForm";
 import { Notification } from './../libs/notifications';
-// import { useAxiosStore } from "../state/StateManager";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
