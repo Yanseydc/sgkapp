@@ -7,26 +7,27 @@
             list-style: none;
             margin: 0;
             padding: 0;
-            width: 250px;
+            width: 200px;
             text-align: center;
         }
 
         li {
-            padding: 1rem;
             cursor: pointer;
 
             &:hover {
-                // background-color: #D71F2A;
                 background-color: coral;
-                a {
-                    // color: white;
-                }
             }
         }
 
         a {
             color: white;
             user-select: none;
+            display: block;
+            padding: 1rem;
+
+            i {
+                margin-right: 10px;
+            }
         }
     }
 }

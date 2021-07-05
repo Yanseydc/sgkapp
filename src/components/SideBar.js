@@ -13,9 +13,11 @@ const SideBar = () => {
                 <ul>
                     <li>
                         <Link to="/addClient">
-                            Registrar nuevo cliente                    
+                            <i className="fas fa-user-plus"></i>
+                            nuevo cliente                    
                         </Link>
                     </li>
+                    
                 </ul>
             </div>
         </div>

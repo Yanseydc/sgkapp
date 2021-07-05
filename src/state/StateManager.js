@@ -1,6 +1,6 @@
 import axios from 'axios';
 import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware'
+import { devtools } from 'zustand/middleware'
 const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
 let tokenStore = (set) => ({
@@ -14,12 +14,25 @@ let axiosStore = (set) => ({
     setLoading: (value) => set( () => ({ loading: value }))
 })
 
-let userStore = (set) => ({
-    username: '',
-});
+// let userStore = (set) => ({
+//     username: '',
+// });
 
 let clientStore = (set) => ({ 
     clients: [],
+    client: {
+        _id: '',
+        firstName:'',
+        lastName:'',
+        email:'',
+        phone:'',
+        birthDate:'',
+        referenceName:'',
+        referencePhone:'',
+        imagePath:'',
+        createdAt:'',
+        updatedAt:''
+    },
     getClients: async () => {
         try {
 
@@ -50,6 +63,24 @@ let clientStore = (set) => ({
             console.error(error);
         }
     },
+    getClient: async (jwt, id) => {
+        try {
+            const options = {
+                method: 'GET',
+                headers: { 
+                    'content-type': 'application/json',
+                    'x-access-token': jwt
+                },
+                url: `http://localhost:4000/api/clients/${id}`
+            };
+        
+            let response = await axios(options);
+
+            set({ client: response.data });
+        } catch(error) {
+            console.error('get clientid error', error);
+        }
+    },
     removeClient: async (jwt, id) => {
         try {
             const options = {
@@ -64,7 +95,7 @@ let clientStore = (set) => ({
             await axios(options);
 
             set( (state) => ({
-                clients: state.clients.filter(client => client._id != id)
+                clients: state.clients.filter(client => client._id !== id)
             }));
         } catch(error) {
             console.log(error);

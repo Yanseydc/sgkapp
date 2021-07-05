@@ -32,9 +32,12 @@ function AddPaymentForm(props) {
     
 
     const handleInputChange = (e) => {
+        let key = e.target.name;
+        let value = e.target.value;
+        value = e.target.name === 'entryDate' ? value.replaceAll("-","/") : value;
         setForm({
             ...form,
-            [e.target.name]: e.target.value
+            [key]: value
         });
     };
 
@@ -44,13 +47,13 @@ function AddPaymentForm(props) {
             const options = {
                 method: 'POST',
                 headers: { 
-                  'content-type': 'application/json',
-                  'x-access-token': jwt
+                    'content-type': 'application/json',
+                    'x-access-token': jwt
                 },
                 data: form,
                 url: 'http://localhost:4000/api/clients/payment'
-              };
-      
+            };
+    
             const res = await axios(options);
             
             Notification({ title: 'Exitoso', message: res.data.message, type: 'success'});

@@ -35,7 +35,7 @@ function AddPayment ({ match }) {
             } else {
                 setPayed(false);
             }
-                     
+            
         } catch(error) {
             let message = error.response ? error.response.data.message : 'Servidor apagado';
             let statusText = error.response? error.response.statusText : 'Servidor apagado';

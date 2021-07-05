@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {  useEffect, useMemo, useState } from 'react';
 import { useTokenStore, useClientStore } from '../state/StateManager'
 import { Link } from "react-router-dom";
@@ -6,7 +5,6 @@ import Table from './../components/Table/Table'
 
 
 function Home() {
-    // const [fetchedData, setFechedData] =  useState([]);   
     const [loading, setLoading] = useState(true);
     const getFechedData = useClientStore( (state) => state.getClients);
     const removeClient = useClientStore( (state) => state.removeClient);
@@ -16,13 +14,9 @@ function Home() {
     const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
     useEffect( () => {   
-        getData();        
-    },[])
-
-    const getData = () => {
         getFechedData(); 
-        setLoading(false);      
-    };
+        setLoading(false);        
+    },[])
 
     const checkIn = async (clientName, clientId) => {
         if (window.confirm(`Quieres registrar entrada de ${clientName} ?`)) {
@@ -73,7 +67,7 @@ function Home() {
             Cell: ({ cell }) => {
                 let status = cell.row.values.status;
                 //return column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""
-                let className = status != 'Corriente' ? ( status == 'Pendiente' ? 'pending' : 'expired' ) : 'active';
+                let className = status !== 'Corriente' ? ( status === 'Pendiente' ? 'pending' : 'expired' ) : 'active';
                 return <div className={`status ${className}`}>{status}</div>;
             },            
         },{
@@ -81,16 +75,16 @@ function Home() {
             disableSortBy: true,
             Cell: ({ cell }) => {
               //check in
-                const { lastPayment, firstName, lastName, _id } = cell.row.values;
+                const { lastPayment, firstName, lastName, _id, status } = cell.row.values;
                 let fullName = `${firstName} ${lastName}`;
             
                 return (
                     <div className="actions">
-                        { lastPayment 
+                        { (lastPayment && status != 'Deudor')
                             ?   <i onClick={ () => {checkIn(fullName, _id)} } className="fas fa-calendar-check checkIn"></i>
                             :   <i className="fas fa-calendar-check" style={{color: 'gray', cursor: 'not-allowed'}}></i>
                         }
-                        <Link to="/viewClient" ><i className="fas fa-eye view"></i></Link>
+                        <Link to={`/viewClient/${_id}`} ><i className="fas fa-eye view"></i></Link>
                         <i className="fas fa-trash remove" onClick={ () => {deleteClient(fullName, _id)} }></i>
                     </div>
                 );                

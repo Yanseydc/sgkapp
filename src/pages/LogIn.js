@@ -94,7 +94,7 @@ const LogIn = () => {
     const signUp = async () => {
         try {            
             const { username, email, password } = signupForm;
-            const response = await axios.post("http://localhost:4000/api/auth/signin", {
+            await axios.post("http://localhost:4000/api/auth/signin", {
                 username, email, password
             });
         } catch(error)  {

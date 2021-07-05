@@ -1,11 +1,10 @@
 import { useTable, useSortBy, usePagination, useFilters } from 'react-table'
 import { Filter, DefaultColumnFilter } from './filters'
 import { useClientStore } from './../../state/StateManager'
-import { useEffect } from 'react';
 
 function Table({ columns }) {
     const data = useClientStore( (state) => state.clients);
-    
+
     const generateSortingIndicator = column => {
       return column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""
     }

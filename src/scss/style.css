@@ -364,12 +364,11 @@ a, a:hover, a:visited {
   list-style: none;
   margin: 0;
   padding: 0;
-  width: 250px;
+  width: 200px;
   text-align: center;
 }
 
 .sidebar .sidebar__menu li {
-  padding: 1rem;
   cursor: pointer;
 }
 
@@ -380,6 +379,12 @@ a, a:hover, a:visited {
 .sidebar .sidebar__menu a {
   color: white;
   user-select: none;
+  display: block;
+  padding: 1rem;
+}
+
+.sidebar .sidebar__menu a i {
+  margin-right: 10px;
 }
 
 .login {
@@ -585,7 +590,7 @@ a, a:hover, a:visited {
 .table {
   width: 100%;
   height: 100%;
-  padding: 5rem;
+  padding: 2rem;
   text-align: center;
 }
 
@@ -594,6 +599,17 @@ a, a:hover, a:visited {
   flex-direction: column;
   width: 100%;
   height: 100%;
+}
+
+.table__content img {
+  width: 100px;
+  transition: all 0.2s ease-in-out;
+}
+
+.table__content img:hover {
+  transform: scale(2.5);
+  border-radius: 2px;
+  border: 2px #3f3d57 solid;
 }
 
 table tr:nth-child(even) {

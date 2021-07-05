@@ -6,8 +6,7 @@ import Webcam from "react-webcam";
 import { useHistory } from "react-router-dom";
 
 function AddClientForm () {
-    const jwt = useTokenStore( (state) => state.jwt );    
-
+    const jwt = useTokenStore( (state) => state.jwt );
     const [client, setClient] = useState({
         firstName: '',
         lastName: '',
@@ -17,15 +16,18 @@ function AddClientForm () {
         referencePhone: '',
         birthDate: '',
         image64: '',
-     });  
+    });  
 
     const webcamRef = useRef(null);
     const history = useHistory();
 
     const handleInputChange = (e) => {
+        let key = e.target.name;
+        let value = e.target.value;
+        value = e.target.name === 'entryDate' ? value.replaceAll("-","/") : value;
         setClient({
             ...client,
-            [e.target.name]: e.target.value
+            [key]: value
         });
     };
 
@@ -35,13 +37,13 @@ function AddClientForm () {
             const options = {
                 method: 'POST',
                 headers: { 
-                  'content-type': 'application/json',
-                  'x-access-token': jwt
+                    'content-type': 'application/json',
+                    'x-access-token': jwt
                 },
                 data: client,
                 url: 'http://localhost:4000/api/clients'
-              };
-      
+            };
+            
             const res = await axios(options);
 
             e.target.reset(); // reset state
