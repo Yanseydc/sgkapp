@@ -1,27 +1,50 @@
-import {  useCallback, useEffect, useRef } from "react";
-import { useClientStore } from '../../state/StateManager'
-import { Notification } from '../../libs/notifications'
+import {  useCallback, useEffect, useRef, useState } from "react";
+import { useTokenStore, useClientStore } from '../../state/StateManager'
+// import { Notification } from '../../libs/notifications'
 import Webcam from "react-webcam";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 function EditClientForm () {
-    
+    const jwt = useTokenStore( (state) => state.jwt );
     const client = useClientStore( (state) => state.client );
+    const setClient = useClientStore( (state) => state.setClient );
+    const update = useClientStore( (state) => state.updateClient );
     const webcamRef = useRef(null);
-    const history = useHistory();
+    const [isNewPicture, setIsNewPicture] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    // const history = useHistory();
+
+    useEffect( () => {
+        disableInputs();
+    }, []);
 
     const handleInputChange = (e) => {
-        console.log(e.target);
-        // e.target.value = e.target.name === 'birthDate' ? e.target.value.replaceAll("-","/") : e.target.value;
-        // setClient({
-        //     ...client,
-        //     [e.target.name]: e.target.value
-        // });
+        let key = e.target.name;
+        let value = e.target.value;
+        value = e.target.name === 'entryDate' ? value.replaceAll("-","/") : value;
+        setClient(key, value);
     };
 
-    const editClient = () => {
-        console.log('edit client');
+    const editClient = (e) => {
+        e.preventDefault();
+        let inputs = document.querySelectorAll('input:not([type=submit])');
+        inputs.forEach(input => {
+            input.removeAttribute('disabled');
+        }); 
+        setIsEditing(true);
     };
+
+    const updateClient = (e) => {
+        e.preventDefault();
+        update(jwt);
+        disableInputs();
+    }
+
+    const capture = useCallback(() => {
+        const imageSrc = webcamRef.current.getScreenshot();
+        setClient('imagePath', imageSrc);
+        setIsNewPicture(true);
+    }, []);
 
     const getDate = () => {
         if(client?.birthDate) {
@@ -36,13 +59,13 @@ function EditClientForm () {
         return '';
     }
 
-    const capture = useCallback(() => {
-        // const imageSrc = webcamRef.current.getScreenshot();
-        // setClient({
-        //     ...client,
-        //     image64: imageSrc
-        // });
-    }, []);
+    const disableInputs = () => {
+        //make all input disbaled
+        let inputs = document.querySelectorAll('input:not([type=submit])');
+        inputs.forEach(input => {
+            input.setAttribute('disabled', true);
+        });  
+    }
 
     return (
         <form >
@@ -59,10 +82,12 @@ function EditClientForm () {
                 <div className="col">   
                     <div className="image">        
                     {
-                        !client.imagePath ?
-                        <i className="fas fa-image fa-8x"></i>
-                    :                                
-                        <img src={ "http://localhost:4000/static/" + client?.imagePath }  alt="Foto del cliente"/>                        
+                        !client.imagePath 
+                        ?   <i className="fas fa-image fa-8x"></i>
+                        :   ( !isNewPicture 
+                            ?   <img src={ "http://localhost:4000/static/" + client?.imagePath }  alt="Foto del cliente"/>
+                            :   <img src={client.imagePath}  alt="Foto del cliente"/>
+                        )
                     } 
                     </div>
                 </div>
@@ -123,7 +148,10 @@ function EditClientForm () {
                     </div>
                 </div>
             </div>
-            <input type="submit" className="btn" value="Registrar cliente" />
+            { isEditing 
+                ? <input type="submit" className="btn" value="Actualizar Cliente" onClick={updateClient}/>
+                : <input type="submit" className="btn" value="Editar" onClick={editClient}/>
+            }
         </form>
     );
 }

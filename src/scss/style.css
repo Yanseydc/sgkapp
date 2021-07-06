@@ -720,20 +720,29 @@ table th {
 
 .box {
   transition: 0.5s;
-  width: 700px;
+  max-width: 700px;
+  min-width: 300px;
   height: auto;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   position: inherit;
   margin: auto;
+  overflow: hidden;
 }
 
 .box__title {
-  padding: 1rem;
-  margin: 0;
-  font-size: 1.5rem;
-  border-radius: 10px 10px 0 0;
+  background-color: #31333f;
+  width: 100%;
+  height: 60px;
+  display: inline-block;
   outline: none;
+}
+
+.box__title-text {
+  font-size: 1.5rem;
+  text-align: center;
+  color: white;
+  font-weight: 500;
 }
 
 .box__form {
@@ -745,25 +754,24 @@ table th {
   position: relative;
 }
 
+@media (max-width: 63.9375em) {
+  .box__form {
+    padding: 0.5rem;
+    margin: auto;
+  }
+}
+
 form {
   width: 100%;
   height: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 .row {
-  width: 100%;
-  position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .row .col {
-  position: relative;
   width: 100%;
   padding: 0 10px;
   margin: 20px 0 10px;
@@ -789,6 +797,7 @@ form {
 
 .row .col .image img {
   object-fit: contain;
+  max-width: 270px;
 }
 
 .row .col i {
@@ -799,7 +808,7 @@ form {
 .row .col .webcam {
   border: 3px solid black;
   border-radius: 10px;
-  width: 300px;
+  max-width: 270px;
   background-color: #3f3d57;
   position: relative;
 }
@@ -854,5 +863,41 @@ form {
   width: 100%;
   height: 100%;
   padding-top: 2rem;
+}
+
+.view {
+  width: 100%;
+  padding: 2rem;
+}
+
+.view__content {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.view .client-edit {
+  width: 100%;
+  align-self: center;
+}
+
+.view .client-registers {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+
+.view .client-registers ul {
+  list-style: none;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  overflow-y: scroll;
+  padding: 0;
+  margin: 0;
 }
 /*# sourceMappingURL=style.css.map */

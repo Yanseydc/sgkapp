@@ -6,7 +6,8 @@ function ViewClient(props) {
     let clientId = props.match.params.id;
     let getClientById = useClientStore( (state) => state.getClient );
     let jwt = useTokenStore( (state) => state.jwt );
-    // let client = useClientStore( (state) => state.client );
+    let payments = useClientStore( (state) => state.payments);
+    let checkIns = useClientStore( (state) => state.checkIns);
 
     useEffect( () => {
         getClientById(jwt, clientId);
@@ -15,26 +16,44 @@ function ViewClient(props) {
     return (
         <div className="view">
             <div className="view__content">
-                <div className="view-first-column">
-                    formulario 1
-                    <Box title="Client">
-                        <EditClientForm />
-                    </Box>
-                    {/* {client} */}
+                <div className="client-edit">
+                    {/* <div className="column"> */}
+                        <Box title="Informacion del cliente">
+                            <EditClientForm />
+                        </Box>
+                    {/* </div>                 */}
                 </div>
-                <div className="view-second-column">
-                    <div className="payments">
-                        <ul>
-                            <li>payment 1</li>
-                        </ul>
-                    </div>
-                    <div className="checkIns">
-                        <ul>
-                            <li>check in 1</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>            
+                <div className="client-registers">
+                    {/* <div className="column"> */}
+                        <Box className="payments" title="Registro de pagos">
+                            <ul>
+                                {
+                                    payments.map( payment => <li key={payment._id}>{payment.entryDate}</li>)
+                                }
+                            </ul>
+                        </Box>
+                    {/* </div> */}
+                    {/* <div className="column"> */}
+                        <Box title="Registro de entradas">
+                            <ul>
+                                {
+                                    checkIns.map( checkIn => <li key={checkIn._id}>{checkIn.createdAt}</li>)
+                                }
+                                <li>asd</li>
+                                <li>asd</li>
+                                <li>asd</li>
+                                <li>asd</li>
+                                <li>asd</li>
+                                <li>asd</li>
+                                <li>asd</li>
+                                <li>asd</li>
+                                <li>asd</li>
+                                <li>asd</li>
+                            </ul> 
+                        </Box>
+                    {/* </div> */}
+                </div> 
+            </div>           
         </div>
     )
 }

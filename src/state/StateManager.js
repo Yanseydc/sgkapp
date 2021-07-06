@@ -18,7 +18,7 @@ let axiosStore = (set) => ({
 //     username: '',
 // });
 
-let clientStore = (set) => ({ 
+let clientStore = (set, get) => ({ 
     clients: [],
     client: {
         _id: '',
@@ -33,6 +33,9 @@ let clientStore = (set) => ({
         createdAt:'',
         updatedAt:''
     },
+    payments: [],
+    checkIns: [],
+    setClient: (key, value) => set( (state) => ({ client: {...state.client, [key]: value} })),
     getClients: async () => {
         try {
 
@@ -75,12 +78,53 @@ let clientStore = (set) => ({
             };
         
             let response = await axios(options);
-
-            set({ client: response.data });
+            let { client, payments, checkIns} = response.data;
+            set({ 
+                client: client,
+                payments: payments,
+                checkIns: checkIns
+            });
         } catch(error) {
             console.error('get clientid error', error);
         }
     },
+    createClient: async (jwt, newClient) => {
+        try {            
+            const options = {
+                method: 'POST',
+                headers: { 
+                    'content-type': 'application/json',
+                    'x-access-token': jwt
+                },
+                data: newClient,
+                url: 'http://localhost:4000/api/clients'
+            };
+            
+            await axios(options);
+            
+        } catch(error) {
+            console.log(error);
+        }
+    }, 
+    updateClient: async (jwt) => {
+        try {
+            
+            const options = {
+                method: 'PUT',
+                headers: { 
+                    'content-type': 'application/json',
+                    'x-access-token': jwt
+                },
+                data: get().client,
+                url: `http://localhost:4000/api/clients/${get().client._id}`
+            };
+            
+            await axios(options);
+            
+        } catch(error) {
+            console.log(error);
+        }
+    }, 
     removeClient: async (jwt, id) => {
         try {
             const options = {

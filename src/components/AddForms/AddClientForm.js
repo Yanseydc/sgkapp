@@ -1,5 +1,5 @@
 import {  useCallback, useRef, useState } from "react";
-import { useTokenStore } from '../../state/StateManager'
+import { useTokenStore, useClientStore } from '../../state/StateManager'
 import { Notification } from '../../libs/notifications'
 import axios from 'axios'
 import Webcam from "react-webcam";
@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 
 function AddClientForm () {
     const jwt = useTokenStore( (state) => state.jwt );
+    // const updateClient = useClientStore( (state) => state.
     const [client, setClient] = useState({
         firstName: '',
         lastName: '',
@@ -33,30 +34,16 @@ function AddClientForm () {
 
     const addClient = async (e) => {
         e.preventDefault()
-        try {            
-            const options = {
-                method: 'POST',
-                headers: { 
-                    'content-type': 'application/json',
-                    'x-access-token': jwt
-                },
-                data: client,
-                url: 'http://localhost:4000/api/clients'
-            };
-            
-            const res = await axios(options);
+        try {
 
-            e.target.reset(); // reset state
+                  // e.target.reset(); // reset state
             
             history.push("/");
-
-            Notification({ title: 'Exitoso', message: res.data.message, type: 'success'});
-            
         } catch(error) {
             let message = error.response ? error.response.data.message : 'Servidor apagado';
             let statusText = error.response? error.response.statusText : 'Servidor apagado';
-            Notification({ title: statusText, message, type: 'danger'}); 
-        }
+            Notification({ title: statusText, message, type: 'danger'});
+        }        
     }
 
     const capture = useCallback(() => {

@@ -1,19 +1,30 @@
 .box {
     transition: 0.5s;
-    width: 700px;    
+    max-width: 700px;   
+    min-width: 300px; 
     height: auto;    
     box-shadow: 0 5px 10px rgba(0,0,0,0.5);
     border-radius: 10px;
     position: inherit;
     margin: auto;
+    overflow: hidden;
+    // display: block;
+    // background: yellow;
+    // position: relative;
 
-
-    &__title {        
-        padding: 1rem;
-        margin: 0;           
-        font-size: 1.5rem;
-        border-radius: 10px 10px 0 0 ;        
+    &__title {   
+        background-color: $bg-black;     
+        width: 100%;
+        height: 60px;       
+        display: inline-block;
+        
         outline: none;
+        &-text { 
+            font-size: 1.5rem;
+            text-align: center;
+            color: white;
+            font-weight: 500;
+        }
     }
 
     &__form {
@@ -23,6 +34,11 @@
         align-items: center;
         flex-direction: column;
         position: relative;
+
+        @include breakpoint-down(medium) {
+            padding: 0.5rem;
+            margin: auto;
+        }
     }
         
 }
