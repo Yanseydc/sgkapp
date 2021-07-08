@@ -1,23 +1,14 @@
-import {  useCallback, useRef, useState } from "react";
+import {  useCallback, useRef } from "react";
 import { useTokenStore, useClientStore } from '../../state/StateManager'
-import { Notification } from '../../libs/notifications'
-import axios from 'axios'
 import Webcam from "react-webcam";
 import { useHistory } from "react-router-dom";
 
 function AddClientForm () {
     const jwt = useTokenStore( (state) => state.jwt );
-    // const updateClient = useClientStore( (state) => state.
-    const [client, setClient] = useState({
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-        referenceName: '',
-        referencePhone: '',
-        birthDate: '',
-        image64: '',
-    });  
+    const removeToken = useTokenStore( (state) => state.removeToken );
+    const client = useClientStore( (state) => state.client);
+    const setClient = useClientStore( (state) => state.setClient);
+    const createClient = useClientStore( (state) => state.createClient);
 
     const webcamRef = useRef(null);
     const history = useHistory();
@@ -26,32 +17,24 @@ function AddClientForm () {
         let key = e.target.name;
         let value = e.target.value;
         value = e.target.name === 'entryDate' ? value.replaceAll("-","/") : value;
-        setClient({
-            ...client,
-            [key]: value
-        });
+        setClient(key, value);
     };
 
     const addClient = async (e) => {
         e.preventDefault()
         try {
-
-                  // e.target.reset(); // reset state
-            
+            await createClient(jwt, client);            
             history.push("/");
         } catch(error) {
-            let message = error.response ? error.response.data.message : 'Servidor apagado';
-            let statusText = error.response? error.response.statusText : 'Servidor apagado';
-            Notification({ title: statusText, message, type: 'danger'});
+            if(error.response.data.name == 'JsonWebTokenError') {
+                removeToken();
+            }
         }        
     }
 
     const capture = useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
-        setClient({
-            ...client,
-            image64: imageSrc
-        });
+        setClient('imagePath', imageSrc);
     }, []);
 
     return (
@@ -69,10 +52,10 @@ function AddClientForm () {
                 <div className="col">   
                     <div className="image">        
                     {
-                        !client.image64 ?
+                        !client.imagePath ?
                         <i className="fas fa-image fa-8x"></i>
                     :                                
-                        <img src={client.image64}  alt="Foto del cliente"/>                        
+                        <img src={client.imagePath}  alt="Foto del cliente"/>                        
                     } 
                     </div>
                 </div>

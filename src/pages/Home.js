@@ -6,27 +6,34 @@ import Table from './../components/Table/Table'
 
 function Home() {
     const [loading, setLoading] = useState(true);
-    const getFechedData = useClientStore( (state) => state.getClients);
+    const removeToken = useTokenStore( (state) => state.removeToken );
+    const getClients = useClientStore( (state) => state.getClients);
     const removeClient = useClientStore( (state) => state.removeClient);
     const checkInClient = useClientStore( (state) => state.checkIn);
 
-    const getJwt = useTokenStore( (state) => state.jwt);
+    const jwt = useTokenStore( (state) => state.jwt);
     const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-    useEffect( () => {   
-        getFechedData(); 
-        setLoading(false);        
+    useEffect( async () => {  
+        try {
+            await getClients(jwt); 
+            setLoading(false); 
+        } catch(error) {
+            if(error.response.data.name == 'JsonWebTokenError') {
+                removeToken();
+            }
+        }
     },[])
 
     const checkIn = async (clientName, clientId) => {
         if (window.confirm(`Quieres registrar entrada de ${clientName} ?`)) {
-            await checkInClient(getJwt, clientId);
+            await checkInClient(jwt, clientId);
         }
     };
 
     const deleteClient = async (clientName, clientId) => {
         if (window.confirm(`Seguro que quieres eliminar a ${clientName} ?`)) {
-            await removeClient(getJwt, clientId);
+            await removeClient(jwt, clientId);
         }
     }
 

@@ -39,16 +39,6 @@ function ViewClient(props) {
                                 {
                                     checkIns.map( checkIn => <li key={checkIn._id}>{checkIn.createdAt}</li>)
                                 }
-                                <li>asd</li>
-                                <li>asd</li>
-                                <li>asd</li>
-                                <li>asd</li>
-                                <li>asd</li>
-                                <li>asd</li>
-                                <li>asd</li>
-                                <li>asd</li>
-                                <li>asd</li>
-                                <li>asd</li>
                             </ul> 
                         </Box>
                     {/* </div> */}

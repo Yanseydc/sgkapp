@@ -21,7 +21,7 @@ function App() {
 
   const jwt = useTokenStore(state => state.jwt);   
   
-  function PrivateRoute({ component: Component, ...rest }) {      
+  function PrivateRoute({ component: Component, ...rest }) { 
     return (
       <Route
         {...rest}
