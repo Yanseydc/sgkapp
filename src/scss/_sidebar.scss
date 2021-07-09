@@ -2,6 +2,10 @@
     // border-right: 1px black solid;
     height: auto;
     background-color: $bg-black;
+    position: fixed;
+    top: 55px;
+    bottom: 0;
+
     .sidebar__menu {
         ul {
             list-style: none;

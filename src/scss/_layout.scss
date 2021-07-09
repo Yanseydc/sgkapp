@@ -1,0 +1,7 @@
+.layout {
+    margin-left: 200px;
+    width:100%;
+    @include breakpoint-down(medium) {
+        margin-left: 0;
+    }
+}

@@ -143,6 +143,10 @@ a, a:hover, a:visited {
 }
 
 .header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 2;
   background-color: #3f3d57;
 }
 
@@ -358,6 +362,9 @@ a, a:hover, a:visited {
 .sidebar {
   height: auto;
   background-color: #31333f;
+  position: fixed;
+  top: 55px;
+  bottom: 0;
 }
 
 .sidebar .sidebar__menu ul {
@@ -730,6 +737,12 @@ table th {
   overflow: hidden;
 }
 
+@media (max-width: 63.9375em) {
+  .box {
+    width: 100%;
+  }
+}
+
 .box__title {
   background-color: #31333f;
   width: 100%;
@@ -891,6 +904,13 @@ form {
   flex-direction: column;
 }
 
+@media (max-width: 63.9375em) {
+  .view .client-registers {
+    margin-top: 30px;
+    gap: 30px;
+  }
+}
+
 .view .client-registers ul {
   list-style: none;
   width: 100%;
@@ -899,5 +919,16 @@ form {
   overflow-y: scroll;
   padding: 0;
   margin: 0;
+}
+
+.layout {
+  margin-left: 200px;
+  width: 100%;
+}
+
+@media (max-width: 63.9375em) {
+  .layout {
+    margin-left: 0;
+  }
 }
 /*# sourceMappingURL=style.css.map */

@@ -8,6 +8,9 @@
     position: inherit;
     margin: auto;
     overflow: hidden;
+    @include breakpoint-down(medium) {
+        width: 100%;
+    }
     // display: block;
     // background: yellow;
     // position: relative;

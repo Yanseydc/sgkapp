@@ -2,6 +2,8 @@ import {  useEffect, useMemo, useState } from 'react';
 import { useTokenStore, useClientStore } from '../state/StateManager'
 import { Link } from "react-router-dom";
 import Table from './../components/Table/Table'
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 
 function Home() {
@@ -26,15 +28,21 @@ function Home() {
     },[])
 
     const checkIn = async (clientName, clientId) => {
-        if (window.confirm(`Quieres registrar entrada de ${clientName} ?`)) {
-            await checkInClient(jwt, clientId);
-        }
+        alertify.confirm(`Registrar Entrada`, `Registrar entrada de ${clientName}?`, 
+            async function() {
+                await checkInClient(jwt, clientId);    
+            },
+            function() {}
+        );
     };
 
     const deleteClient = async (clientName, clientId) => {
-        if (window.confirm(`Seguro que quieres eliminar a ${clientName} ?`)) {
-            await removeClient(jwt, clientId);
-        }
+        alertify.confirm(`Registrar Entrada`, `Seguro que quieres eliminar a ${clientName} ?`, 
+            async function() {
+                await removeClient(jwt, clientId);   
+            },
+            function() {}
+        );
     }
 
     const columns = useMemo( () => [

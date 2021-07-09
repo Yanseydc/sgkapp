@@ -1,6 +1,10 @@
 .header {
     // border-bottom: 0.1px solid black;
     // box-shadow: 0 0 2px black;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 2;
     background-color: $bg-black-light;
     &.open {        
         .header__hamburguer {
