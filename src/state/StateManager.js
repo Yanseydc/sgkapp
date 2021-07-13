@@ -1,4 +1,3 @@
-import axios from 'axios';
 import create from 'zustand';
 import { devtools } from 'zustand/middleware'
 import CallApi from './CallApi';
@@ -35,12 +34,18 @@ let clientStore = (set, get) => ({
         createdAt:'',
         updatedAt:''
     },
+    hasPayment: true,
     payments: [],
     checkIns: [],
+    clearClientStore: () => {
+        Object.keys(get().client).forEach(key => {
+            get().setClient(key, '');
+        });  
+    },
     setClient: (key, value) => set( (state) => ({ client: {...state.client, [key]: value} })),
     getClients: async (jwt) => {
         let response = await CallApi(
-            `http://localhost:4000/api/clients`, 
+            `${process.env.REACT_APP_CLIENTS_API}`, 
             'GET',
             '',
             jwt
@@ -69,7 +74,7 @@ let clientStore = (set, get) => ({
     },
     getClient: async (jwt, id) => {
         let response = await CallApi(
-            `http://localhost:4000/api/clients/${id}`, 
+            `${process.env.REACT_APP_CLIENTS_API}${id}`, 
             'GET',
             '',
             jwt
@@ -81,17 +86,52 @@ let clientStore = (set, get) => ({
             checkIns: checkIns
         });
     },
+    getPayment: async (jwt, id) => {
+        let response = await CallApi(
+            `${process.env.REACT_APP_CLIENTS_API}${id}`, 
+            'GET',
+            '',
+            jwt
+        );
+        let { firstName, lastName} = response.data.client;
+        let payments = response.data.payments;
+    
+        get().setClient('firstName', firstName);
+        get().setClient('lastName', lastName);
+        get().setClient('_id', id);
+        // let lastPayment = payments.length == 0 ? '' : payments[0].entryDate;
+        set({hasPayment: true});
+        if(payments.length > 0) { 
+            let { entryDate: lastPayment, months} = payments[0];       
+            let currentDate = new Date().getTime();
+            let registerDate = new Date(`${lastPayment}`);
+            let nextPayment = new Date(registerDate.setMonth( registerDate.getMonth() + months)).getTime();
+            if(currentDate >= nextPayment) {              
+                set({hasPayment: false});
+            }
+        } else {
+            set({hasPayment: false});
+        }
+    },
     createClient: async (jwt, newClient) => {
         await CallApi(
-            `http://localhost:4000/api/clients`, 
+            process.env.REACT_APP_CLIENTS_API, 
             'POST',
             newClient,
             jwt
         ); 
     }, 
+    createPayment: async (jwt, data) => {
+        await CallApi(
+            process.env.REACT_APP_CLIENTS_API+'/payment', 
+            'POST',
+            data,
+            jwt
+        ); 
+    }, 
     updateClient: async (jwt) => {
         await CallApi(
-            `http://localhost:4000/api/clients/${get().client._id}`, 
+            `${process.env.REACT_APP_CLIENTS_API}${get().client._id}`, 
             'PUT',
             get().client,
             jwt
@@ -99,7 +139,7 @@ let clientStore = (set, get) => ({
     }, 
     removeClient: async (jwt, id) => {
         await CallApi(
-            `http://localhost:4000/api/clients/${id}`, 
+            `${process.env.REACT_APP_CLIENTS_API}${id}`, 
             'DELETE',
             '',
             jwt
@@ -111,7 +151,7 @@ let clientStore = (set, get) => ({
     }, 
     checkIn: async (jwt, id) => {
         await CallApi(
-            `http://localhost:4000/api/clients/checkIn`, 
+            `${process.env.REACT_APP_CLIENTS_API}checkIn`, 
             'POST',
             { clientId: id },
             jwt

@@ -1,47 +1,30 @@
 import { useEffect, useState } from "react";
 import Box from "../components/Box/Box";
 import AddPaymentForm from "../components/AddForms/AddPaymentForm";
-import { Notification } from './../libs/notifications';
-import axios from "axios";
 import { Link } from "react-router-dom";
+import { useTokenStore, useClientStore } from "../state/StateManager";
 
 
 function AddPayment ({ match }) {
     const clientId = match.params.id;
-    const [client, setClient] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [payed, setPayed] = useState(true);
+    const jwt = useTokenStore( (state) => state.jwt );
+    const removeToken = useTokenStore( (state) => state.removeToken );
+    const getPayment = useClientStore( (state) => state.getPayment);
+    const payed = useClientStore( (state) => state.hasPayment);
+    const client = useClientStore( (state) => state.client);
+    const [loading, setLoading] = useState(false);
+    
 
-    useEffect(() => {
-        if(loading) {
-            getPayment();
-        }
-
-    }, []);
-
-    const getPayment = async () => {
-        try {                    
-            const res = await axios.get(`http://localhost:4000/api/clients/${clientId}`);            
-            setClient(res.data);
-            setLoading(false);
-            
-            if(res.data.lastPayment) {                
-                let currentDate = new Date().getTime();
-                let registerDate = new Date(`${res.data.lastPayment}`);
-                let nextPayment = new Date(registerDate.setMonth( registerDate.getMonth() + res.data.months)).getTime();
-                if(currentDate >= nextPayment) {              
-                    setPayed(false);
-                }
-            } else {
-                setPayed(false);
-            }
-            
+    useEffect(async () => {
+        try {
+            await getPayment(jwt, clientId); 
+            setLoading(false); 
         } catch(error) {
-            let message = error.response ? error.response.data.message : 'Servidor apagado';
-            let statusText = error.response? error.response.statusText : 'Servidor apagado';
-            Notification({ title: statusText, message, type: 'danger'}); 
+            if(error.response.data.name == 'JsonWebTokenError') {
+                removeToken();
+            }
         }
-    }
+    }, []);
 
     return (
         <div className="addPayment">

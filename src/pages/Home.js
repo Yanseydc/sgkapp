@@ -3,7 +3,7 @@ import { useTokenStore, useClientStore } from '../state/StateManager'
 import { Link } from "react-router-dom";
 import Table from './../components/Table/Table'
 import alertify from 'alertifyjs';
-import 'alertifyjs/build/css/alertify.css';
+
 
 
 function Home() {
@@ -53,7 +53,7 @@ function Home() {
             Cell: ({ cell }) => {
                 let imagePath = cell.row.values.imagePath;
                 if(imagePath) {
-                    return <div><img src={ "http://localhost:4000/static/" + imagePath } alt="foto del cliente" /></div>;
+                    return <div><img src={ process.env.REACT_APP_IMAGE_URL + imagePath } alt="foto del cliente" /></div>;
                 }
                 return '';
             },
@@ -70,8 +70,9 @@ function Home() {
             accessor: 'lastPayment',
             Cell: ({ cell }) => {
                 let lastPayment = cell.row.values.lastPayment;
+                let status = cell.row.values.status;
                 let id = cell.row.values._id;
-                if(lastPayment) {
+                if(lastPayment && status != 'Deudor') {
                     return lastPayment;
                 }
                 return <div className="btn-payment"><Link to={`/payment/${id}`}>+ Agregar pago</Link></div>

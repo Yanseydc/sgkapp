@@ -8,7 +8,6 @@ function Table({ columns }) {
     const generateSortingIndicator = column => {
       return column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""
     }
-
     const { 
         getTableProps,
         getTableBodyProps,
@@ -24,7 +23,7 @@ function Table({ columns }) {
         pageCount,
         gotoPage,
         nextPage,
-        previousPage,           
+        previousPage, 
         state: { pageIndex },
       } = useTable(
         { 
@@ -32,12 +31,13 @@ function Table({ columns }) {
           data,           
           defaultColumn: { Filter: DefaultColumnFilter },
           initialState: {
-            hiddenColumns: ["_id"]
+            hiddenColumns: ["_id"],
+            pageSize: 5
           }
         },
         useFilters, // useFilters!        
         useSortBy,
-        usePagination
+        usePagination,
       )
 
     return (

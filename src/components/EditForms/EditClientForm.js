@@ -1,8 +1,7 @@
 import {  useCallback, useEffect, useRef, useState } from "react";
 import { useTokenStore, useClientStore } from '../../state/StateManager'
-// import { Notification } from '../../libs/notifications'
 import Webcam from "react-webcam";
-// import { useHistory } from "react-router-dom";
+import alertify from 'alertifyjs';
 
 function EditClientForm () {
     const jwt = useTokenStore( (state) => state.jwt );
@@ -36,8 +35,14 @@ function EditClientForm () {
 
     const updateClient = (e) => {
         e.preventDefault();
-        update(jwt);
-        disableInputs();
+        alertify.confirm(`Actualizar Cliente`, `Deseas actualizar al cliente?`, 
+            async function() {
+                await update(jwt);
+                setIsEditing(false);
+                disableInputs(); 
+            },
+            function() {}
+        );
     }
 
     const capture = useCallback(() => {
@@ -53,7 +58,6 @@ function EditClientForm () {
             let month = birthDate.getMonth()+1;
             let day = birthDate.getDay();
             let fullYear = `${year}-${month > 9 ? month : '0'+month}-${day > 9 ? month : '0'+day}`;
-            console.log('fullYear: ',  fullYear);
             return fullYear;
         }
         return '';

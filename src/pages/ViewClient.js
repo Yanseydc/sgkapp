@@ -8,10 +8,15 @@ function ViewClient(props) {
     let jwt = useTokenStore( (state) => state.jwt );
     let payments = useClientStore( (state) => state.payments);
     let checkIns = useClientStore( (state) => state.checkIns);
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
     useEffect( () => {
         getClientById(jwt, clientId);
-    }, []); 
+    }, [jwt, clientId, getClientById]); 
+
+    const getDate = (date) => {
+        return new Date(`${date}`).toLocaleDateString('es-Es', dateOptions);
+    }
 
     return (
         <div className="view">
@@ -26,20 +31,20 @@ function ViewClient(props) {
                 <div className="client-registers">
                     {/* <div className="column"> */}
                         <Box className="payments" title="Registro de pagos">
-                            <ul>
+                            <ol>
                                 {
-                                    payments.map( payment => <li key={payment._id}>{payment.entryDate}</li>)
+                                    payments.map( payment => <li key={payment._id}>{getDate(payment.entryDate)}</li>)
                                 }
-                            </ul>
+                            </ol>
                         </Box>
                     {/* </div> */}
                     {/* <div className="column"> */}
                         <Box title="Registro de entradas">
-                            <ul>
+                            <ol>
                                 {
-                                    checkIns.map( checkIn => <li key={checkIn._id}>{checkIn.createdAt}</li>)
+                                    checkIns.map( checkIn => <li key={checkIn._id}>{getDate(checkIn.createdAt)}</li>)
                                 }
-                            </ul> 
+                            </ol> 
                         </Box>
                     {/* </div> */}
                 </div> 

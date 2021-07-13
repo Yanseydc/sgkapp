@@ -16,6 +16,9 @@ import ViewClient from "./pages/ViewClient";
 
 import ReactNotification from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
+import 'alertifyjs/build/css/alertify.css';
+
+require('dotenv').config({path: __dirname + '/.env'});
 
 function App() {  
 

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Notification } from '../../libs/notifications';
-import { useTokenStore } from "../../state/StateManager";
+import { useClientStore, useTokenStore } from "../../state/StateManager";
 
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -11,6 +10,8 @@ function AddPaymentForm(props) {
     const clientId = client._id;
     
     const jwt = useTokenStore( (state) => state.jwt );
+    const removeToken = useTokenStore( (state) => state.removeToken );
+    const createPayment = useClientStore( (state) => state.createPayment);
 
     const [form, setForm] = useState({
         clientId,
@@ -26,15 +27,16 @@ function AddPaymentForm(props) {
         let sixMonths = 6;
         let date = new Date();        
         let minDate = date.setMonth( date.getMonth() - sixMonths);
+        let currentDate = new Date(new Date().toLocaleDateString()).toISOString().split("T")[0];
         document.querySelector("#entryDate").min = new Date(minDate).toISOString().split("T")[0];
-        document.querySelector("#entryDate").max = new Date().toISOString().split("T")[0];
+        document.querySelector("#entryDate").max = currentDate;
     }, []);
     
 
     const handleInputChange = (e) => {
         let key = e.target.name;
         let value = e.target.value;
-        value = e.target.name === 'entryDate' ? value.replaceAll("-","/") : value;
+        value = key === 'entryDate' ? value.replaceAll("-","/") : value;
         setForm({
             ...form,
             [key]: value
@@ -43,29 +45,14 @@ function AddPaymentForm(props) {
 
     const addPayment = async (e) => {        
         e.preventDefault();        
-        try {            
-            const options = {
-                method: 'POST',
-                headers: { 
-                    'content-type': 'application/json',
-                    'x-access-token': jwt
-                },
-                data: form,
-                url: 'http://localhost:4000/api/clients/payment'
-            };
-    
-            const res = await axios(options);
-            
-            Notification({ title: 'Exitoso', message: res.data.message, type: 'success'});
-
+        try {
+            await createPayment(jwt, form);            
             history.push("/");
-            
-            
         } catch(error) {
-            let message = error.response ? error.response.data.message : 'Servidor apagado';
-            let statusText = error.response? error.response.statusText : 'Servidor apagado';
-            Notification({ title: statusText, message, type: 'danger'});            
-        }
+            if(error.response.data.name == 'JsonWebTokenError') {
+                removeToken();
+            }
+        }  
     }
 
     return (
@@ -84,7 +71,7 @@ function AddPaymentForm(props) {
                     <div className="col">
                         <div className="form-input">
                             <label htmlFor="cost">Costo:</label>
-                            <input type="text" name="cost" onChange={handleInputChange} placeholder="Ingrese el costo total" required="required"/>      
+                            <input type="number" name="cost" onChange={handleInputChange} placeholder="Ingrese el costo total" required="required"/>      
                         </div>
                     </div>
                 </div>

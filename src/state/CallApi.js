@@ -16,7 +16,7 @@ const CallApi = async (url, method, data, jwt) => {
     try {
         let response = await axios(options);
         //if method is not GET should be a notification success notification
-        if(method != 'GET') {
+        if(method !== 'GET') {
             let message = response ? response.data.message : '';
             Notification({ title: 'Exitoso', message: message, type: 'success'});
         } else {

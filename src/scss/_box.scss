@@ -1,7 +1,7 @@
 .box {
     transition: 0.5s;
     max-width: 700px;   
-    min-width: 300px; 
+    min-width: auto; 
     height: auto;    
     box-shadow: 0 5px 10px rgba(0,0,0,0.5);
     border-radius: 10px;
@@ -11,9 +11,6 @@
     @include breakpoint-down(medium) {
         width: 100%;
     }
-    // display: block;
-    // background: yellow;
-    // position: relative;
 
     &__title {   
         background-color: $bg-black;     

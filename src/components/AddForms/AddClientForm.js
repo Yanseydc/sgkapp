@@ -1,7 +1,8 @@
-import {  useCallback, useRef } from "react";
+import {  useCallback, useEffect, useRef } from "react";
 import { useTokenStore, useClientStore } from '../../state/StateManager'
 import Webcam from "react-webcam";
 import { useHistory } from "react-router-dom";
+import alertify from 'alertifyjs';
 
 function AddClientForm () {
     const jwt = useTokenStore( (state) => state.jwt );
@@ -9,34 +10,49 @@ function AddClientForm () {
     const client = useClientStore( (state) => state.client);
     const setClient = useClientStore( (state) => state.setClient);
     const createClient = useClientStore( (state) => state.createClient);
+    const resetClient = useClientStore( (state) => state.clearClientStore);
 
     const webcamRef = useRef(null);
     const history = useHistory();
 
+    useEffect( () => {
+        resetClient();
+    }, []);
+
     const handleInputChange = (e) => {
         let key = e.target.name;
         let value = e.target.value;
-        value = e.target.name === 'entryDate' ? value.replaceAll("-","/") : value;
+        value = key === 'entryDate' ? value.replaceAll("-","/") : value;
+        value = key === 'phone' || key === 'referencePhone' ? validateNumber(value) : value;
         setClient(key, value);
     };
 
     const addClient = async (e) => {
-        e.preventDefault()
-        try {
-            await createClient(jwt, client);            
-            history.push("/");
-        } catch(error) {
-            if(error.response.data.name == 'JsonWebTokenError') {
-                removeToken();
-            }
-        }        
+        e.preventDefault();
+        alertify.confirm(`Crear Cliente`, `Estas seguro de crear nuevo cliente?`, 
+            async function() {
+                try {
+                    await createClient(jwt, client);            
+                    history.push("/");
+                } catch(error) {
+                    if(error.response.data.name === 'JsonWebTokenError') {
+                        removeToken();
+                    }
+                }  
+            },
+            function() {}
+        );              
     }
 
     const capture = useCallback(() => {
-        const imageSrc = webcamRef.current.getScreenshot();
+        let screenShot = webcamRef.current.getScreenshot();
+        const imageSrc = screenShot ? screenShot : '' ;
         setClient('imagePath', imageSrc);
-    }, []);
+    });
 
+    const validateNumber = (value) => {
+        return value.replace(/[^0-9\.]+/g, '');;
+    }
     return (
         <form onSubmit={addClient}>
             <div className="row">
@@ -66,14 +82,14 @@ function AddClientForm () {
                 <div className="col">
                     <div className="form-input">
                         <label htmlFor="firstName">Nombre:</label>
-                        <input id="firstName" placeholder="Ingresa nombre(s) del cliente" type="text" name="firstName" onChange={handleInputChange} required="required" />
+                        <input id="firstName" placeholder="Ingresa nombre(s) del cliente" type="text" name="firstName" onChange={handleInputChange} value={client.firstName} required="required" />
                     </div>
                 </div>
 
                 <div className="col">
                     <div className="form-input">
                         <label htmlFor="lastName">Apellidos:</label>
-                        <input id="lastName" placeholder="Ingresa apellidos del cliente" type="text" name="lastName" onChange={handleInputChange} required="required" />
+                        <input id="lastName" placeholder="Ingresa apellidos del cliente" type="text" name="lastName" onChange={handleInputChange} value={client.lastName} required="required" />
                     </div>
                 </div>
             </div>
@@ -82,13 +98,13 @@ function AddClientForm () {
                 <div className="col">
                     <div className="form-input">
                         <label htmlFor="phone">Telefono:</label>
-                        <input id="phone" placeholder="Ingresa telefono del cliente" type="text" name="phone" onChange={handleInputChange}/>
+                        <input id="phone" placeholder="Ingresa telefono del cliente" type="text" name="phone" maxLength="10" onChange={handleInputChange} value={client.phone}/>
                     </div>
                 </div>
                 <div className="col">
                     <div className="form-input">
                         <label htmlFor="email">Correo:</label>
-                        <input id="email" placeholder="Ingresa correo del cliente" type="email" name="email" onChange={handleInputChange}/>
+                        <input id="email" placeholder="Ingresa correo del cliente" type="email" name="email" onChange={handleInputChange} value={client.email}/>
                     </div>
                 </div>
             </div>
@@ -97,13 +113,13 @@ function AddClientForm () {
                 <div className="col">
                     <div className="form-input">
                         <label htmlFor="referenceName">Referencia personal:</label>
-                        <input id="referenceName" placeholder="Ingresa referencia personal del cliente" type="text" name="referenceName" onChange={handleInputChange}/>
+                        <input id="referenceName" placeholder="Ingresa referencia personal del cliente" type="text" name="referenceName" onChange={handleInputChange} value={client.referenceName}/>
                     </div>
                 </div>
                 <div className="col">
                     <div className="form-input">
                         <label htmlFor="referencePhone">Telefono de referencia:</label>
-                        <input id="referencePhone" placeholder="Ingresa telefono de referencia del cliente" type="text" name="referencePhone" onChange={handleInputChange}/>
+                        <input id="referencePhone" placeholder="Ingresa telefono de referencia del cliente" type="text" name="referencePhone" onChange={handleInputChange} value={client.referencePhone}/>
                     </div>
                 </div>
             </div>
