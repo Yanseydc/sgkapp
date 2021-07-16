@@ -16,11 +16,11 @@ const CallApi = async (url, method, data, jwt) => {
     try {
         let response = await axios(options);
         //if method is not GET should be a notification success notification
-        if(method !== 'GET') {
+        if(method !== 'GET' && !url.includes('signin') ) {
             let message = response ? response.data.message : '';
             Notification({ title: 'Exitoso', message: message, type: 'success'});
         } else {
-            //if methos is get should return data
+            //if method is get request should return data
             return response;
         }
     } catch(error) {

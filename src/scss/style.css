@@ -727,20 +727,13 @@ table th {
 
 .box {
   transition: 0.5s;
-  max-width: 700px;
+  min-width: 700px;
   min-width: auto;
   height: auto;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   position: inherit;
-  margin: auto;
   overflow: hidden;
-}
-
-@media (max-width: 63.9375em) {
-  .box {
-    width: 100%;
-  }
 }
 
 .box__title {
@@ -781,7 +774,7 @@ form {
 
 .row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .row .col {
@@ -804,52 +797,96 @@ form {
   padding: 0.8rem;
 }
 
-.row .col .image {
-  text-align: center;
-}
-
-.row .col .image img {
-  object-fit: contain;
-  max-width: 270px;
-}
-
-.row .col i {
-  opacity: 0.5;
-  text-align: center;
-}
-
-.row .col .webcam {
-  border: 3px solid black;
-  border-radius: 10px;
-  max-width: 270px;
-  background-color: #3f3d57;
-  position: relative;
-}
-
-.row .button {
-  width: 200px !important;
-  margin: auto;
+@media (max-width: 39.9375em) {
+  .row .col .form-input input {
+    font-size: 1rem;
+  }
 }
 
 .btn {
-  margin-top: 15px;
-  width: 200px;
+  margin-top: 20px;
+  width: 100%;
   background-color: #3f3d57;
-  padding: 1rem;
+  padding: 1.5rem;
   color: white;
   border: none;
   border-radius: 5px;
+  display: block;
+  margin: auto;
+  cursor: pointer;
 }
 
 .btn:hover {
   box-shadow: 0 5px 25px black;
 }
 
+.takePhoto {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@media (max-width: 87.4375em) {
+  .takePhoto {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 87.4375em) {
+  .takePhoto .camera {
+    margin: auto;
+  }
+}
+
+.takePhoto .webcam {
+  border: 1px solid black;
+  border-radius: 6px;
+  max-width: 270px;
+  background-color: #3f3d57;
+  position: relative;
+  object-fit: contain;
+}
+
+.takePhoto .image {
+  text-align: center;
+}
+
+.takePhoto .image img {
+  object-fit: contain;
+  max-width: 270px;
+}
+
+.takePhoto i {
+  opacity: 0.5;
+  text-align: center;
+}
+
+.btn-take-photo {
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+  width: 150px !important;
+}
+
 .addPayment {
-  width: 100%;
+  width: 55%;
   height: 100%;
   padding-top: 2rem;
   text-align: center;
+  display: block;
+  margin: auto;
+}
+
+@media (max-width: 39.9375em) {
+  .addPayment {
+    width: 100%;
+  }
+}
+
+@media (max-width: 63.9375em) {
+  .addPayment {
+    width: 90%;
+  }
 }
 
 .addPayment__title {
@@ -882,7 +919,24 @@ form {
 .addClient {
   width: 100%;
   height: 100%;
-  padding-top: 2rem;
+}
+
+.addClient__content {
+  display: block;
+  margin: auto;
+  width: 55%;
+}
+
+@media (max-width: 39.9375em) {
+  .addClient__content {
+    width: 100%;
+  }
+}
+
+@media (max-width: 63.9375em) {
+  .addClient__content {
+    width: 100%;
+  }
 }
 
 .view {
@@ -913,12 +967,11 @@ form {
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: space-evenly;
-  align-items: center;
   flex-direction: column;
+  justify-content: space-between;
 }
 
-@media (max-width: 63.9375em) {
+@media (max-width: 39.9375em) {
   .view .client-registers {
     margin-top: 30px;
     gap: 30px;
@@ -926,23 +979,76 @@ form {
 }
 
 .view .client-registers ol {
-  list-style: decimal;
+  list-style: none;
+  padding: 0;
   width: 100%;
   height: 200px;
   overflow: hidden;
-  overflow: scroll;
-  padding: 2rem;
+  overflow-y: scroll;
   margin: 0;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 63.9375em) {
+  .view .client-registers ol {
+    height: 400px;
+  }
+}
+
+@media (max-width: 39.9375em) {
+  .view .client-registers ol {
+    height: 300px;
+  }
+}
+
+.view .client-registers ol li {
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.view .client-registers ol li:hover {
+  background-color: coral;
+  color: white;
+  font-size: 1.5rem;
 }
 
 .layout {
   margin-left: 200px;
   width: 100%;
+  padding: 1rem;
 }
 
 @media (max-width: 63.9375em) {
   .layout {
     margin-left: 0;
   }
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: auto;
+  background-color: #555;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  display: inline-block;
+  /*position*/
+  position: absolute;
+  z-index: 200;
+  top: 70px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
 /*# sourceMappingURL=style.css.map */

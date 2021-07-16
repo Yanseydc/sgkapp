@@ -6,9 +6,11 @@ function AddMember() {
 
     return (
         <div className="addClient">
-            <Box title="Crear cliente">
-                <AddClientForm/>
-            </Box>
+            <div className="addClient__content">
+                <Box title="Crear cliente">
+                    <AddClientForm/>
+                </Box>
+            </div>
         </div>
     );
         

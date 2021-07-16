@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { devtools } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 import CallApi from './CallApi';
 
 const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -12,12 +12,28 @@ let tokenStore = (set) => ({
 
 let axiosStore = (set) => ({
     loading: true,
-    setLoading: (value) => set( () => ({ loading: value }))
-})
+    setLoading: (value) => set( () => ({ loading: value })),
+});
 
-// let userStore = (set) => ({
-//     username: '',
-// });
+let userStore = (set, get) => ({
+    user: {
+        username: '',
+        email: '',
+    },
+    setUser: (key, value) => set( (state) => ({ user: { ...state.user, [key]: value}})),
+    getUser: async (data) => {
+        let response = await CallApi(
+            'http://localhost:4000/api/auth/signin',
+            'POST',
+            data,
+            ''
+        );
+        let { username, email, token} = response.data;
+        get().setUser('username', username);
+        get().setUser('email', email);
+        return token;
+    },
+});
 
 let clientStore = (set, get) => ({ 
     clients: [],
@@ -166,3 +182,4 @@ clientStore = devtools(clientStore);
 export const useTokenStore = create(tokenStore);
 export const useAxiosStore = create(axiosStore);
 export const useClientStore = create(clientStore);
+export const useUserStore = create(persist(userStore), { name: 'user-storage'});

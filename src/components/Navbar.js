@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useHistory } from 'react-router-dom';
-import { useTokenStore } from '../state/StateManager';
+import { useTokenStore, useUserStore } from '../state/StateManager';
 import { Link } from "react-router-dom";
 
 function NavBar() {
     const history = useHistory();
-    const removeToken = useTokenStore(state => state.removeToken);    
+    const removeToken = useTokenStore(state => state.removeToken); 
+    const user = useUserStore( state => state.user);
 
     const [hamburguerFlag, setHamburguerFlag] = useState(false);
     const hambuguerRef = useRef(null);
@@ -49,6 +50,13 @@ function NavBar() {
         history.push('/login');
     }
 
+    const toggleOnClick = () => {
+        setTimeout(() => {
+
+            document.querySelector('#hamburguer').click();
+        }, 1100);
+    }
+
     return(
         <header className={`header ${hamburguerFlag ? 'open': ''}`}>
             <div className="overlay has-fade"></div>
@@ -71,13 +79,13 @@ function NavBar() {
                 {/* <a href="#!" className="button header__cta hide-for-mobile">Log out</a> */}
                 <div className="header__user">                    
                     <a href="#!" id="user-dropdown">
-                        <span className="username">Admin</span>
+                        <span className="username">{user.username}</span>
                         <i className="far fa-user icon"></i>
                     </a>
 
                     <div className="dropdown">
-                        <h3>Admin</h3>
-                        <h4>email@gmail.com</h4>
+                        <h3>{user.username}</h3>
+                        <h4>{user.email}</h4>
                         <ul>
                             <li>
                                 <i className="fas fa-cog"></i>
@@ -94,8 +102,10 @@ function NavBar() {
             </nav>
 
             <div className="header__menu has-fade">
-                <a href="#!">Users</a>
-                <a href="#!">Dashboard</a>
+                <Link to="/addClient">
+                    <i className="fas fa-user-plus"></i>
+                    nuevo cliente                    
+                </Link>
             </div>
 
         </header>

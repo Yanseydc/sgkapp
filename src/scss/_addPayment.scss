@@ -1,8 +1,18 @@
 .addPayment {
-    width: 100%;
+    width: 55%;
     height: 100%;
     padding-top: 2rem;
     text-align: center;
+    display: block;
+    margin: auto;
+    
+    @include breakpoint-down(small) {
+        width: 100%;
+    }
+
+    @include breakpoint-down(medium) {
+        width:90%;
+    }
     &__title {
         font-size: 1.5rem;
         span {

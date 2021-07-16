@@ -57,27 +57,29 @@ function AddClientForm () {
         <form onSubmit={addClient}>
             <div className="row">
                 <div className="col">
-                    <Webcam
-                        className="webcam"
-                        audio={false}
-                        ref={webcamRef}
-                        screenshotFormat="image/jpeg"
-                        
-                    />                              
+                    <div className="takePhoto">
+                        <div className="camera">
+                            <Webcam
+                                className="webcam"
+                                audio={false}
+                                ref={webcamRef}
+                                screenshotFormat="image/jpeg"
+                                
+                            />                              
+                        </div>
+                
+                        <div className="image">        
+                            {
+                                !client.imagePath ?
+                                <i className="fas fa-image fa-8x"></i>
+                            :                                
+                                <img src={client.imagePath}  alt="Foto del cliente"/>                        
+                            } 
+                        </div>
+                    </div> 
+                    <button type="button" className="button blue btn-take-photo" onClick={capture}>Capture photo</button>               
                 </div>
-                <div className="col">   
-                    <div className="image">        
-                    {
-                        !client.imagePath ?
-                        <i className="fas fa-image fa-8x"></i>
-                    :                                
-                        <img src={client.imagePath}  alt="Foto del cliente"/>                        
-                    } 
-                    </div>
-                </div>
-                <button type="button" className="button blue" onClick={capture}>Capture photo</button>
-            </div>                
-
+            </div>
             <div className="row">
                 <div className="col">
                     <div className="form-input">

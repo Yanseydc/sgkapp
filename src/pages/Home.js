@@ -1,10 +1,9 @@
 import {  useEffect, useMemo, useState } from 'react';
 import { useTokenStore, useClientStore } from '../state/StateManager'
 import { Link } from "react-router-dom";
-import Table from './../components/Table/Table'
+import Table from './../components/Table/Table';
 import alertify from 'alertifyjs';
-
-
+import Tooltip from './../components/Tooltip';
 
 function Home() {
     const [loading, setLoading] = useState(true);
@@ -21,7 +20,8 @@ function Home() {
             await getClients(jwt); 
             setLoading(false); 
         } catch(error) {
-            if(error.response.data.name == 'JsonWebTokenError') {
+            let errorName = error.response.data.name
+            if(errorName == 'JsonWebTokenError' || errorName == 'TokenExpiredError') {
                 removeToken();
             }
         }
@@ -97,11 +97,17 @@ function Home() {
                 return (
                     <div className="actions">
                         { (lastPayment && status != 'Deudor')
-                            ?   <i onClick={ () => {checkIn(fullName, _id)} } className="fas fa-calendar-check checkIn"></i>
-                            :   <i className="fas fa-calendar-check" style={{color: 'gray', cursor: 'not-allowed'}}></i>
+                            ?   <Tooltip text="Registrar entrada"><i onClick={ () => {checkIn(fullName, _id)} } className="fas fa-calendar-check checkIn"></i></Tooltip>
+                            :   <Tooltip text="Revisar pagos"><i className="fas fa-calendar-check" style={{color: 'gray', cursor: 'not-allowed'}}></i></Tooltip>
                         }
-                        <Link to={`/viewClient/${_id}`} ><i className="fas fa-eye view"></i></Link>
-                        <i className="fas fa-trash remove" onClick={ () => {deleteClient(fullName, _id)} }></i>
+                        <Tooltip text="Ver Cliente">
+                            <Link to={`/viewClient/${_id}`} >
+                                <i className="fas fa-eye view"></i>
+                            </Link>
+                        </Tooltip>
+                        <Tooltip text="Borrar Cliente">
+                            <i className="fas fa-trash remove" onClick={ () => {deleteClient(fullName, _id)} }></i>
+                        </Tooltip>
                     </div>
                 );                
             },                    

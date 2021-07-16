@@ -11,7 +11,7 @@ const Layout = (props) => {
             { jwt ? <Header /> : ''}
             <div className="app__content flex">
                 { jwt ? <SideBar /> : '' }
-                <div className="layout">
+                <div className={ jwt ? 'layout' : ''}>
                     {props.children}
                 </div>
             </div>

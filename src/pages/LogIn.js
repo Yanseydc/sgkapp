@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useTokenStore } from '../state/StateManager';
+import { useTokenStore, useUserStore } from '../state/StateManager';
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 
@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 const LogIn = () => {
     const addToken = useTokenStore(state => state.addToken); 
     const getJwt = useTokenStore( (state) => state.jwt); 
+    const getUser = useUserStore(state => state.getUser);
     
     let [signinForm, setSigninForm] = useState({
         username: '',
@@ -63,32 +64,14 @@ const LogIn = () => {
         });
     }
 
-    const signIn = async () => {
-        try {
-            const { username, password } = signinForm;
-            const response = await axios.post("http://localhost:4000/api/auth/signin", {username, password});
-            const { token } = response.data;
-            
-            localStorage.setItem("jwt", token);
-            
-            addToken(token);
+    const signIn = async () => {            
+        let token = await getUser(signinForm)
 
-            history.push('/');            
+        localStorage.setItem("jwt", token);
+        
+        addToken(token);
 
-        } catch(error) {
-            let message;
-            if(error.response) {
-                message = error.response.data.message ;                
-            } else {
-                message = 'El servidor esta apagado'                
-            }
-
-            setSigninError({
-                ...signInError,
-                message,
-                hasError: true
-            });            
-        }
+        history.push('/'); 
     }
 
     const signUp = async () => {

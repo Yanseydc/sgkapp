@@ -75,16 +75,18 @@ function EditClientForm () {
         <form >
             <div className="row">
                 <div className="col">
-                    <Webcam
-                        className="webcam"
-                        audio={false}
-                        ref={webcamRef}
-                        screenshotFormat="image/jpeg"
-                        
-                    />                              
-                </div>
-                <div className="col">   
-                    <div className="image">        
+                    <div className="takePhoto">
+                        <div className="camera">
+                            <Webcam
+                                className="webcam"
+                                audio={false}
+                                ref={webcamRef}
+                                screenshotFormat="image/jpeg"
+                                
+                            />                              
+                        </div>
+                
+                        <div className="image">        
                     {
                         !client.imagePath 
                         ?   <i className="fas fa-image fa-8x"></i>
@@ -94,8 +96,9 @@ function EditClientForm () {
                         )
                     } 
                     </div>
+                    </div> 
+                    <button type="button" className="button blue btn-take-photo" onClick={capture}>Capture photo</button>               
                 </div>
-                <button type="button" className="button blue" onClick={capture}>Capture photo</button>
             </div>                
 
             <div className="row">
