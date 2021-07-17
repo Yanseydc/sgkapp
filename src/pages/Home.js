@@ -1,13 +1,17 @@
 import {  useEffect, useMemo, useState } from 'react';
-import { useTokenStore, useClientStore } from '../state/StateManager'
+import { useTokenStore, useClientStore, useAxiosStore } from '../state/StateManager'
 import { Link } from "react-router-dom";
 import Table from './../components/Table/Table';
 import alertify from 'alertifyjs';
 import Tooltip from './../components/Tooltip';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+library.add(fas, fab);
 
 function Home() {
-    const [loading, setLoading] = useState(true);
-    const removeToken = useTokenStore( (state) => state.removeToken );
+    const loading = useAxiosStore( state => state.loading);
     const getClients = useClientStore( (state) => state.getClients);
     const removeClient = useClientStore( (state) => state.removeClient);
     const checkInClient = useClientStore( (state) => state.checkIn);
@@ -16,15 +20,7 @@ function Home() {
     const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
     useEffect( async () => {  
-        try {
-            await getClients(jwt); 
-            setLoading(false); 
-        } catch(error) {
-            let errorName = error.response.data.name
-            if(errorName == 'JsonWebTokenError' || errorName == 'TokenExpiredError') {
-                removeToken();
-            }
-        }
+        await getClients(jwt);
     },[])
 
     const checkIn = async (clientName, clientId) => {
@@ -39,7 +35,7 @@ function Home() {
     const deleteClient = async (clientName, clientId) => {
         alertify.confirm(`Registrar Entrada`, `Seguro que quieres eliminar a ${clientName} ?`, 
             async function() {
-                await removeClient(jwt, clientId);   
+                await removeClient(jwt, clientId); 
             },
             function() {}
         );
@@ -97,16 +93,20 @@ function Home() {
                 return (
                     <div className="actions">
                         { (lastPayment && status != 'Deudor')
-                            ?   <Tooltip text="Registrar entrada"><i onClick={ () => {checkIn(fullName, _id)} } className="fas fa-calendar-check checkIn"></i></Tooltip>
-                            :   <Tooltip text="Revisar pagos"><i className="fas fa-calendar-check" style={{color: 'gray', cursor: 'not-allowed'}}></i></Tooltip>
+                            ?   <Tooltip text="Registrar entrada">
+                                    <FontAwesomeIcon icon="calendar-check" className="checkIn icon" onClick={ () => {checkIn(fullName, _id)} } />
+                                </Tooltip>
+                            :   <Tooltip text="Revisar pagos">
+                                    <FontAwesomeIcon icon="calendar-check" style={{color: 'gray', cursor: 'not-allowed'}} />
+                                </Tooltip>
                         }
                         <Tooltip text="Ver Cliente">
                             <Link to={`/viewClient/${_id}`} >
-                                <i className="fas fa-eye view"></i>
+                                <FontAwesomeIcon icon="eye" className="icon" style={{color: '#187bcd'}} />
                             </Link>
                         </Tooltip>
                         <Tooltip text="Borrar Cliente">
-                            <i className="fas fa-trash remove" onClick={ () => {deleteClient(fullName, _id)} }></i>
+                            <FontAwesomeIcon icon="trash" className="remove icon" onClick={ () => {deleteClient(fullName, _id)} }/>
                         </Tooltip>
                     </div>
                 );                
@@ -118,7 +118,7 @@ function Home() {
         <div className="table">
             <div className="table__content">
                 { loading 
-                    ? <p>Loading......</p>
+                    ? <h4>Loading...</h4>
                     : <Table columns={columns}  />       
                 }
             </div>

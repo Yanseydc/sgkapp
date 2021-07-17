@@ -6,7 +6,6 @@ import alertify from 'alertifyjs';
 
 function AddClientForm () {
     const jwt = useTokenStore( (state) => state.jwt );
-    const removeToken = useTokenStore( (state) => state.removeToken );
     const client = useClientStore( (state) => state.client);
     const setClient = useClientStore( (state) => state.setClient);
     const createClient = useClientStore( (state) => state.createClient);
@@ -30,15 +29,9 @@ function AddClientForm () {
     const addClient = async (e) => {
         e.preventDefault();
         alertify.confirm(`Crear Cliente`, `Estas seguro de crear nuevo cliente?`, 
-            async function() {
-                try {
-                    await createClient(jwt, client);            
-                    history.push("/");
-                } catch(error) {
-                    if(error.response.data.name === 'JsonWebTokenError') {
-                        removeToken();
-                    }
-                }  
+            async function() {                
+                await createClient(jwt, client);            
+                history.push("/");
             },
             function() {}
         );              

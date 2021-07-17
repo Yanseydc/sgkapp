@@ -1,7 +1,4 @@
-
-
 function Tooltip(props){
-    console.log(props)
     return(
         <div className="tooltip">
             {props.children}

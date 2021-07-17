@@ -1,5 +1,5 @@
 import {  useCallback, useEffect, useRef, useState } from "react";
-import { useTokenStore, useClientStore } from '../../state/StateManager'
+import { useTokenStore, useClientStore, useAxiosStore } from '../../state/StateManager'
 import Webcam from "react-webcam";
 import alertify from 'alertifyjs';
 
@@ -11,7 +11,7 @@ function EditClientForm () {
     const webcamRef = useRef(null);
     const [isNewPicture, setIsNewPicture] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    // const history = useHistory();
+    const [cameraConnected, setCameraConnected] = useState(false);
 
     useEffect( () => {
         disableInputs();
@@ -36,7 +36,7 @@ function EditClientForm () {
     const updateClient = (e) => {
         e.preventDefault();
         alertify.confirm(`Actualizar Cliente`, `Deseas actualizar al cliente?`, 
-            async function() {
+            async function() {                
                 await update(jwt);
                 setIsEditing(false);
                 disableInputs(); 
@@ -71,19 +71,32 @@ function EditClientForm () {
         });  
     }
 
+    //callback for when component can't receive a media stream with MediaStreamError param
+    const userMediaError = () => {
+        setCameraConnected(true);
+    }
+
+    const userMediaSuccess = () => {
+        setCameraConnected(false);
+    }
+
     return (
         <form >
             <div className="row">
                 <div className="col">
                     <div className="takePhoto">
                         <div className="camera">
-                            <Webcam
-                                className="webcam"
-                                audio={false}
-                                ref={webcamRef}
-                                screenshotFormat="image/jpeg"
-                                
-                            />                              
+                            { cameraConnected
+                            ?   <h4>Connec't a camera</h4>
+                            :   <Webcam
+                                    className="webcam"
+                                    audio={false}
+                                    ref={webcamRef}
+                                    screenshotFormat="image/jpeg"
+                                    onUserMediaError={userMediaError} 
+                                    onUserMedia={userMediaSuccess}                             
+                                />
+                            }                              
                         </div>
                 
                         <div className="image">        

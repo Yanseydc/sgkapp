@@ -21,32 +21,27 @@ function ViewClient(props) {
     return (
         <div className="view">
             <div className="view__content">
-                <div className="client-edit">
-                    {/* <div className="column"> */}
-                        <Box title="Informacion del cliente">
-                            <EditClientForm />
-                        </Box>
-                    {/* </div>                 */}
+                <div className="client-edit">                    
+                    <Box title="Informacion del cliente">
+                        <EditClientForm />
+                    </Box>                    
                 </div>
-                <div className="client-registers">
-                    {/* <div className="column"> */}
-                        <Box className="payments" title="Registro de pagos">
-                            <ol>
-                                {
-                                    payments.map( payment => <li key={payment._id}>{getDate(payment.entryDate)}</li>)
-                                }
-                            </ol>
-                        </Box>
-                    {/* </div> */}
-                    {/* <div className="column"> */}
-                        <Box title="Registro de entradas">
-                            <ol>
-                                {
-                                    checkIns.map( checkIn => <li key={checkIn._id}>{getDate(checkIn.createdAt)}</li>)
-                                }
-                            </ol> 
-                        </Box>
-                    {/* </div> */}
+                <div className="client-registers">                    
+                    <Box className="payments" title="Registro de pagos">
+                        <ol>
+                            {
+                                payments.map( payment => <li key={payment._id}>{getDate(payment.entryDate)}</li>)
+                            }
+                        </ol>
+                    </Box>                
+                
+                    <Box title="Registro de entradas">
+                        <ol>
+                            {
+                                checkIns.map( checkIn => <li key={checkIn._id}>{getDate(checkIn.createdAt)}</li>)
+                            }
+                        </ol> 
+                    </Box>                    
                 </div> 
             </div>           
         </div>

@@ -11,7 +11,7 @@ let tokenStore = (set) => ({
 });
 
 let axiosStore = (set) => ({
-    loading: true,
+    loading: false,
     setLoading: (value) => set( () => ({ loading: value })),
 });
 
