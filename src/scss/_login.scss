@@ -144,12 +144,11 @@
                     border: 1px solid $bg-black-light;
                 }
 
-                input[type="button"] {
+                input[type="submit"] {
                     background: $bg-black-light;
                     color: white;
                     border: none;
                     border-radius: 5px;
-                    max-width: 100px;
                     cursor: pointer;
                 }
 
@@ -163,7 +162,7 @@
     
             }
 
-            &.signupForm input[type="button"] {
+            &.signupForm input[type="submit"] {
                 background: $bg-mustard 
             }
 

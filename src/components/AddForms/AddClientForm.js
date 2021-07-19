@@ -1,8 +1,10 @@
-import {  useCallback, useEffect, useRef } from "react";
+import {  useCallback, useEffect, useRef, useState } from "react";
 import { useTokenStore, useClientStore } from '../../state/StateManager'
 import Webcam from "react-webcam";
 import { useHistory } from "react-router-dom";
 import alertify from 'alertifyjs';
+import Icon from './../../components/Icon';
+
 
 function AddClientForm () {
     const jwt = useTokenStore( (state) => state.jwt );
@@ -10,6 +12,7 @@ function AddClientForm () {
     const setClient = useClientStore( (state) => state.setClient);
     const createClient = useClientStore( (state) => state.createClient);
     const resetClient = useClientStore( (state) => state.clearClientStore);
+    const [cameraConnected, setCameraConnected] = useState(false);
 
     const webcamRef = useRef(null);
     const history = useHistory();
@@ -41,36 +44,52 @@ function AddClientForm () {
         let screenShot = webcamRef.current.getScreenshot();
         const imageSrc = screenShot ? screenShot : '' ;
         setClient('imagePath', imageSrc);
-    });
+    },[]);
 
     const validateNumber = (value) => {
-        return value.replace(/[^0-9\.]+/g, '');;
+        return value.replace(/[^0-9]+/g, '');;
     }
+
+    //callback for when component can't receive a media stream with MediaStreamError param
+    const userMediaError = () => {
+        setCameraConnected(true);
+    }
+
+    const userMediaSuccess = () => {
+        setCameraConnected(false);
+    }
+
     return (
         <form onSubmit={addClient}>
             <div className="row">
                 <div className="col">
                     <div className="takePhoto">
                         <div className="camera">
-                            <Webcam
-                                className="webcam"
-                                audio={false}
-                                ref={webcamRef}
-                                screenshotFormat="image/jpeg"
-                                
-                            />                              
+                            { cameraConnected
+                            ?   <h4>Conecta una camara</h4>
+                            :   <Webcam
+                                    className="webcam"
+                                    audio={false}
+                                    ref={webcamRef}
+                                    screenshotFormat="image/jpeg"
+                                    onUserMediaError={userMediaError} 
+                                    onUserMedia={userMediaSuccess}                             
+                                />
+                            }                              
                         </div>
                 
                         <div className="image">        
                             {
-                                !client.imagePath ?
-                                <i className="fas fa-image fa-8x"></i>
-                            :                                
-                                <img src={client.imagePath}  alt="Foto del cliente"/>                        
+                                !client.imagePath 
+                            ?   <Icon icon="image" theClassname="icon" theSize="6x" theStyle={{ opacity:"0.5" }}/>
+                            :   <img src={client.imagePath}  alt="Foto del cliente"/>                        
                             } 
                         </div>
                     </div> 
-                    <button type="button" className="button blue btn-take-photo" onClick={capture}>Capture photo</button>               
+                    {cameraConnected 
+                        ? ''
+                        : <button type="button" className="button blue btn-take-photo" onClick={capture}>Capture photo</button>
+                    }
                 </div>
             </div>
             <div className="row">

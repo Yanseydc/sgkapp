@@ -544,12 +544,11 @@ a, a:hover, a:visited {
   border: 1px solid #3f3d57;
 }
 
-.login__form .form form input[type="button"] {
+.login__form .form form input[type="submit"] {
   background: #3f3d57;
   color: white;
   border: none;
   border-radius: 5px;
-  max-width: 100px;
   cursor: pointer;
 }
 
@@ -561,7 +560,7 @@ a, a:hover, a:visited {
   border-radius: 5px;
 }
 
-.login__form .form.signupForm input[type="button"] {
+.login__form .form.signupForm input[type="submit"] {
   background: #ca802b;
 }
 
@@ -856,7 +855,8 @@ form {
   max-width: 270px;
 }
 
-.takePhoto i {
+.takePhoto .icon {
+  font-size: 10rem;
   opacity: 0.5;
   text-align: center;
 }

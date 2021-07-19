@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { useTokenStore, useUserStore } from '../state/StateManager';
 import { Link } from "react-router-dom";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+library.add(fas, fab);
 
 function NavBar() {
     const history = useHistory();
@@ -50,13 +55,6 @@ function NavBar() {
         history.push('/login');
     }
 
-    const toggleOnClick = () => {
-        setTimeout(() => {
-
-            document.querySelector('#hamburguer').click();
-        }, 1100);
-    }
-
     return(
         <header className={`header ${hamburguerFlag ? 'open': ''}`}>
             <div className="overlay has-fade"></div>
@@ -80,7 +78,7 @@ function NavBar() {
                 <div className="header__user">                    
                     <a href="#!" id="user-dropdown">
                         <span className="username">{user.username}</span>
-                        <i className="far fa-user icon"></i>
+                        <FontAwesomeIcon icon="user" className="icon" />
                     </a>
 
                     <div className="dropdown">

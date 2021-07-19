@@ -1,14 +1,10 @@
-import {  useEffect, useMemo, useState } from 'react';
+import {  useEffect, useMemo } from 'react';
 import { useTokenStore, useClientStore, useAxiosStore } from '../state/StateManager'
 import { Link } from "react-router-dom";
 import Table from './../components/Table/Table';
 import alertify from 'alertifyjs';
 import Tooltip from './../components/Tooltip';
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-import { fab } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-library.add(fas, fab);
+import Icon from './../components/Icon'
 
 function Home() {
     const loading = useAxiosStore( state => state.loading);
@@ -19,14 +15,20 @@ function Home() {
     const jwt = useTokenStore( (state) => state.jwt);
     const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-    useEffect( async () => {  
-        await getClients(jwt);
-    },[])
+    useEffect( () => {  
+        async function fetchClients() {
+            await getClients(jwt);
+        }
+        fetchClients();
+    },[getClients, jwt])
 
     const checkIn = async (clientName, clientId) => {
         alertify.confirm(`Registrar Entrada`, `Registrar entrada de ${clientName}?`, 
-            async function() {
-                await checkInClient(jwt, clientId);    
+            function() {
+                async function chekingInClient() {
+                    await checkInClient(jwt, clientId);
+                }
+                chekingInClient();
             },
             function() {}
         );
@@ -34,8 +36,12 @@ function Home() {
 
     const deleteClient = async (clientName, clientId) => {
         alertify.confirm(`Registrar Entrada`, `Seguro que quieres eliminar a ${clientName} ?`, 
-            async function() {
-                await removeClient(jwt, clientId); 
+            function() {
+                async function removingClient() {
+                    await removeClient(jwt, clientId); 
+                }
+
+                removingClient();
             },
             function() {}
         );
@@ -68,7 +74,7 @@ function Home() {
                 let lastPayment = cell.row.values.lastPayment;
                 let status = cell.row.values.status;
                 let id = cell.row.values._id;
-                if(lastPayment && status != 'Deudor') {
+                if(lastPayment && status !== 'Deudor') {
                     return lastPayment;
                 }
                 return <div className="btn-payment"><Link to={`/payment/${id}`}>+ Agregar pago</Link></div>
@@ -92,21 +98,21 @@ function Home() {
             
                 return (
                     <div className="actions">
-                        { (lastPayment && status != 'Deudor')
+                        { (lastPayment && status !== 'Deudor')
                             ?   <Tooltip text="Registrar entrada">
-                                    <FontAwesomeIcon icon="calendar-check" className="checkIn icon" onClick={ () => {checkIn(fullName, _id)} } />
+                                    <Icon icon="calendar-check" theClassName="checkIn icon" onClick={ () => checkIn(fullName, _id) } />
                                 </Tooltip>
                             :   <Tooltip text="Revisar pagos">
-                                    <FontAwesomeIcon icon="calendar-check" style={{color: 'gray', cursor: 'not-allowed'}} />
+                                    <Icon icon="calendar-check" theStyle={{color: 'gray', cursor: 'not-allowed'}} />
                                 </Tooltip>
                         }
-                        <Tooltip text="Ver Cliente">
+                    <Tooltip text="Ver Cliente">
                             <Link to={`/viewClient/${_id}`} >
-                                <FontAwesomeIcon icon="eye" className="icon" style={{color: '#187bcd'}} />
+                                <Icon icon="eye" theClassName="icon" theStyle={{color: '#187bcd'}} />
                             </Link>
                         </Tooltip>
                         <Tooltip text="Borrar Cliente">
-                            <FontAwesomeIcon icon="trash" className="remove icon" onClick={ () => {deleteClient(fullName, _id)} }/>
+                            <Icon icon="trash" theClassName="remove icon" onClick={ () => {deleteClient(fullName, _id)} }/>
                         </Tooltip>
                     </div>
                 );                

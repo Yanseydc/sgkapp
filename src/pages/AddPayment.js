@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Box from "../components/Box/Box";
 import AddPaymentForm from "../components/AddForms/AddPaymentForm";
 import { Link } from "react-router-dom";
@@ -8,20 +8,16 @@ import { useTokenStore, useClientStore, useAxiosStore} from "../state/StateManag
 function AddPayment ({ match }) {
     const clientId = match.params.id;
     const jwt = useTokenStore( (state) => state.jwt );
-    const removeToken = useTokenStore( (state) => state.removeToken );
     const getPayment = useClientStore( (state) => state.getPayment);
     const payed = useClientStore( (state) => state.hasPayment);
     const client = useClientStore( (state) => state.client);
     const loading = useAxiosStore( state => state.loading);
 
-    useEffect(async () => {
-        try {
+    useEffect(() => {
+        async function fetchPayment() {
             await getPayment(jwt, clientId); 
-        } catch(error) {
-            if(error.response?.data.name == 'JsonWebTokenError') {
-                removeToken();
-            }
         }
+        fetchPayment();
     }, []);
 
     return (

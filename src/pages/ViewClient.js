@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useClientStore, useTokenStore } from './../state/StateManager';
 import EditClientForm from './../components/EditForms/EditClientForm'
 import Box from './../components/Box/Box';
+
 function ViewClient(props) {
     let clientId = props.match.params.id;
     let getClientById = useClientStore( (state) => state.getClient );
     let jwt = useTokenStore( (state) => state.jwt );
     let payments = useClientStore( (state) => state.payments);
     let checkIns = useClientStore( (state) => state.checkIns);
-    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: "numeric", minute: "numeric", hour12: true};
 
     useEffect( () => {
         getClientById(jwt, clientId);

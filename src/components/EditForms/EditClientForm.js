@@ -1,7 +1,8 @@
 import {  useCallback, useEffect, useRef, useState } from "react";
-import { useTokenStore, useClientStore, useAxiosStore } from '../../state/StateManager'
+import { useTokenStore, useClientStore } from '../../state/StateManager'
 import Webcam from "react-webcam";
 import alertify from 'alertifyjs';
+import Icon from './../../components/Icon';
 
 function EditClientForm () {
     const jwt = useTokenStore( (state) => state.jwt );
@@ -21,6 +22,7 @@ function EditClientForm () {
         let key = e.target.name;
         let value = e.target.value;
         value = e.target.name === 'entryDate' ? value.replaceAll("-","/") : value;
+        value = key === 'phone' || key === 'referencePhone' ? validateNumber(value) : value;
         setClient(key, value);
     };
 
@@ -71,6 +73,9 @@ function EditClientForm () {
         });  
     }
 
+    const validateNumber = (value) => {
+        return value.replace(/[^0-9]+/g, '');
+    }
     //callback for when component can't receive a media stream with MediaStreamError param
     const userMediaError = () => {
         setCameraConnected(true);
@@ -87,7 +92,7 @@ function EditClientForm () {
                     <div className="takePhoto">
                         <div className="camera">
                             { cameraConnected
-                            ?   <h4>Connec't a camera</h4>
+                            ?   <h4>Conecta una camara</h4>
                             :   <Webcam
                                     className="webcam"
                                     audio={false}
@@ -100,15 +105,17 @@ function EditClientForm () {
                         </div>
                 
                         <div className="image">        
-                    {
-                        !client.imagePath 
-                        ?   <i className="fas fa-image fa-8x"></i>
-                        :   ( !isNewPicture 
-                            ?   <img src={ "http://localhost:4000/static/" + client?.imagePath }  alt="Foto del cliente"/>
-                            :   <img src={client.imagePath}  alt="Foto del cliente"/>
-                        )
-                    } 
-                    </div>
+                        {
+                            !client.imagePath 
+                            ?   
+                                // <i className="fas fa-image fa-8x"></i>
+                                <Icon icon="image" theSize="6x" theStyle={{opacity: '0.5'}}/>
+                            :   ( !isNewPicture 
+                                ?   <img src={ "http://localhost:4000/static/" + client?.imagePath }  alt="Foto del cliente"/>
+                                :   <img src={client.imagePath}  alt="Foto del cliente"/>
+                            )
+                        } 
+                        </div>
                     </div> 
                     <button type="button" className="button blue btn-take-photo" onClick={capture}>Capture photo</button>               
                 </div>
@@ -134,7 +141,7 @@ function EditClientForm () {
                 <div className="col">
                     <div className="form-input">
                         <label htmlFor="phone">Telefono:</label>
-                        <input id="phone" placeholder="Ingresa telefono del cliente" type="text" name="phone" onChange={handleInputChange} value={client?.phone}/>
+                        <input id="phone" placeholder="Ingresa telefono del cliente" type="text" maxLength="10" name="phone" onChange={handleInputChange} value={client?.phone}/>
                     </div>
                 </div>
                 <div className="col">
@@ -155,7 +162,7 @@ function EditClientForm () {
                 <div className="col">
                     <div className="form-input">
                         <label htmlFor="referencePhone">Telefono de referencia:</label>
-                        <input id="referencePhone" placeholder="Ingresa telefono de referencia del cliente" type="text" name="referencePhone" onChange={handleInputChange} value={client?.referencePhone}/>
+                        <input id="referencePhone" placeholder="Ingresa telefono de referencia del cliente" type="text" name="referencePhone" maxLength="10" onChange={handleInputChange} value={client?.referencePhone}/>
                     </div>
                 </div>
             </div>

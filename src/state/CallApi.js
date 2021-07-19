@@ -32,6 +32,7 @@ const CallApi = async (url, method, data, jwt) => {
         let message;
         let statusText;
         let errorName;
+    
         if(error.response) {
             message = error.response.data.message;
             statusText = error.response.statusText;
@@ -41,7 +42,7 @@ const CallApi = async (url, method, data, jwt) => {
             statusText = 'Error en servidor'
         }
 
-        if(errorName == 'JsonWebTokenError' || errorName == 'TokenExpiredError') {
+        if(errorName === 'JsonWebTokenError' || errorName === 'TokenExpiredError') {
             useTokenStore.getState().removeToken();
         }
         

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useTokenStore, useUserStore } from '../state/StateManager';
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
@@ -7,24 +6,22 @@ import { useHistory } from "react-router";
 const LogIn = () => {
     const addToken = useTokenStore(state => state.addToken); 
     const getJwt = useTokenStore( (state) => state.jwt); 
-    const getUser = useUserStore(state => state.getUser);
+    const signIn = useUserStore(state => state.signIn);
+    const signUp = useUserStore(state => state.signUp);
+
+    let initialSignUpFormState = {
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',        
+    }
     
     let [signinForm, setSigninForm] = useState({
         username: '',
         password: ''
     });
 
-    let [signupForm, setSignupForm] = useState({
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: '',        
-    });
-
-    let [signInError, setSigninError] = useState({
-        message: '',
-        hasError: false
-    });
+    let [signupForm, setSignupForm] = useState(initialSignUpFormState);
     
     const history = useHistory();
     
@@ -50,7 +47,6 @@ const LogIn = () => {
     });
 
     const handleInputEventSignin = (e) => {
-        setSigninError({...signInError, hasError: false});
         setSigninForm({
             ...signinForm,
             [e.target.name]: e.target.value
@@ -64,8 +60,9 @@ const LogIn = () => {
         });
     }
 
-    const signIn = async () => {            
-        let token = await getUser(signinForm)
+    const signingIn = async (e) => { 
+        e.preventDefault();    
+        let token = await signIn(signinForm)
 
         localStorage.setItem("jwt", token);
         
@@ -74,30 +71,12 @@ const LogIn = () => {
         history.push('/'); 
     }
 
-    const signUp = async () => {
-        try {            
-            const { username, email, password } = signupForm;
-            await axios.post("http://localhost:4000/api/auth/signin", {
-                username, email, password
-            });
-        } catch(error)  {
-            console.log('singup error', error);
-        }
-    }
-
-    const handleKeyDown = (e) => {        
-        if(e.keyCode === 13) {
-            const keys = Object.keys(signinForm); //get keys
-            //loop through object to validate values
-            for(let i in keys) {                
-                if(signinForm[keys[i]] === '') {
-                    setSigninError({...signInError, hasError: true, message: "Los campos no pueden ir vacios"})
-                    return;
-                }
-            }
-            //if everythin is ok, try signin
-            signIn();
-        }
+    const signingUp = async (e) => {
+        e.preventDefault();
+        const { username, email, password } = signupForm;
+        await signUp({username, email, password});
+        setSignupForm({...initialSignUpFormState});
+        document.querySelector('.signin-btn').click();
     }
 
     return (
@@ -106,33 +85,31 @@ const LogIn = () => {
                 <div className="login__container-bgColor">
                     <div className="login__box signin">
                         <h2>Ya tienes una cuenta ?</h2>
-                        <button className="signin-btn">Ingresar</button>
+                        <button type="button" className="signin-btn">Ingresar</button>
                     </div>
                     <div className="login__box signup">
                         <h2>No tienes una cuenta ?</h2>
-                        <button className="signup-btn">Registrate</button>
+                        <button type="button" className="signup-btn">Registrate</button>
                     </div>
                 </div>    
                 <div className="login__form">
                     <div className="form signinForm">
-                        <form>
+                        <form id="singinForm" onSubmit={signingIn}>
                             <h3>Iniciar Sesion</h3>
-                            <input type="text" name="username" value={signinForm.username} placeholder="Usuario" onChange={handleInputEventSignin} onKeyDown={handleKeyDown}/>
-                            <input type="password" name="password" value={signinForm.password} placeholder="Contraseña" onChange={handleInputEventSignin} onKeyDown={handleKeyDown}/>
-                            <input type="button" onClick={signIn} value="Ingresar" /> 
-
-                            { signInError.hasError ? <span>{signInError.message}</span> : '' }
+                            <input type="text" name="username" value={signinForm.username} placeholder="Usuario" onChange={handleInputEventSignin} required/>
+                            <input type="password" name="password" value={signinForm.password} placeholder="Contraseña" onChange={handleInputEventSignin} required/>
+                            <input id="signUpForm" type="submit" value="Ingresar" /> 
                         </form>
                     </div>
 
                     <div className="form signupForm">
-                        <form>
+                        <form id="singupForm" onSubmit={signingUp}>
                             <h3>Registrar Usuario</h3>
-                            <input type="text" name="username" value={signupForm.username} placeholder="Usuario" onChange={handleInputEventSignup}/>
-                            <input type="email" name="email" value={signupForm.email} placeholder="Correo" onChange={handleInputEventSignup}/>
-                            <input type="password" name="password" value={signupForm.password} placeholder="Contraseña" onChange={handleInputEventSignup}/>
-                            <input type="password" name="confirmPassword" value={signupForm.confirmPassword} placeholder="Confirmar Contraseña" onChange={handleInputEventSignup}/>
-                            <input type="button" onClick={signUp} value="Registrar" onChange={handleInputEventSignup}/> 
+                            <input type="text" name="username" value={signupForm.username} placeholder="Usuario" onChange={handleInputEventSignup} required/>
+                            <input type="email" name="email" value={signupForm.email} placeholder="Correo" onChange={handleInputEventSignup} required/>
+                            <input type="password" name="password" value={signupForm.password} placeholder="Contraseña" onChange={handleInputEventSignup} required/>
+                            <input type="password" name="confirmPassword" value={signupForm.confirmPassword} placeholder="Confirmar Contraseña" onChange={handleInputEventSignup} required/>
+                            <input type="submit" value="Registrar" onChange={handleInputEventSignup}/> 
                         </form>
                         
                     </div>

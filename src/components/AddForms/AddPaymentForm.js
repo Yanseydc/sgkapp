@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useClientStore, useTokenStore } from "../../state/StateManager";
-
-import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 
@@ -10,7 +8,6 @@ function AddPaymentForm(props) {
     const clientId = client._id;
     
     const jwt = useTokenStore( (state) => state.jwt );
-    const removeToken = useTokenStore( (state) => state.removeToken );
     const createPayment = useClientStore( (state) => state.createPayment);
 
     const [form, setForm] = useState({
@@ -36,7 +33,6 @@ function AddPaymentForm(props) {
     const handleInputChange = (e) => {
         let key = e.target.name;
         let value = e.target.value;
-        value = key === 'entryDate' ? value.replaceAll("-","/") : value;
         setForm({
             ...form,
             [key]: value
@@ -44,15 +40,9 @@ function AddPaymentForm(props) {
     };
 
     const addPayment = async (e) => {        
-        e.preventDefault();        
-        try {
-            await createPayment(jwt, form);            
-            history.push("/");
-        } catch(error) {
-            if(error.response.data.name == 'JsonWebTokenError') {
-                removeToken();
-            }
-        }  
+        e.preventDefault();                
+        await createPayment(jwt, form);            
+        history.push("/");         
     }
 
     return (

@@ -21,7 +21,7 @@ let userStore = (set, get) => ({
         email: '',
     },
     setUser: (key, value) => set( (state) => ({ user: { ...state.user, [key]: value}})),
-    getUser: async (data) => {
+    signIn: async (data) => {
         let response = await CallApi(
             'http://localhost:4000/api/auth/signin',
             'POST',
@@ -32,6 +32,14 @@ let userStore = (set, get) => ({
         get().setUser('username', username);
         get().setUser('email', email);
         return token;
+    },
+    signUp: async (data) => {
+        await CallApi(
+            'http://localhost:4000/api/auth/signup',
+            'POST',
+            data,
+            ''
+        );
     },
 });
 
