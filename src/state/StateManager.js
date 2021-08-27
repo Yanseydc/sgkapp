@@ -23,7 +23,7 @@ let userStore = (set, get) => ({
     setUser: (key, value) => set( (state) => ({ user: { ...state.user, [key]: value}})),
     signIn: async (data) => {
         let response = await CallApi(
-            'http://localhost:4000/api/auth/signin',
+            process.env.REACT_APP_AUTH_API+"signin",
             'POST',
             data,
             ''
@@ -35,7 +35,7 @@ let userStore = (set, get) => ({
     },
     signUp: async (data) => {
         await CallApi(
-            'http://localhost:4000/api/auth/signup',
+            process.env.REACT_APP_AUTH_API+"signup",
             'POST',
             data,
             ''
@@ -69,7 +69,7 @@ let clientStore = (set, get) => ({
     setClient: (key, value) => set( (state) => ({ client: {...state.client, [key]: value} })),
     getClients: async (jwt) => {
         let response = await CallApi(
-            `${process.env.REACT_APP_CLIENTS_API}`, 
+            process.env.REACT_APP_CLIENTS_API, 
             'GET',
             '',
             jwt
@@ -98,7 +98,7 @@ let clientStore = (set, get) => ({
     },
     getClient: async (jwt, id) => {
         let response = await CallApi(
-            `${process.env.REACT_APP_CLIENTS_API}${id}`, 
+            process.env.REACT_APP_CLIENTS_API+id, 
             'GET',
             '',
             jwt
@@ -112,7 +112,7 @@ let clientStore = (set, get) => ({
     },
     getPayment: async (jwt, id) => {
         let response = await CallApi(
-            `${process.env.REACT_APP_CLIENTS_API}${id}`, 
+            process.env.REACT_APP_CLIENTS_API+id, 
             'GET',
             '',
             jwt
@@ -147,7 +147,7 @@ let clientStore = (set, get) => ({
     }, 
     createPayment: async (jwt, data) => {
         await CallApi(
-            process.env.REACT_APP_CLIENTS_API+'/payment', 
+            process.env.REACT_APP_CLIENTS_API+`payment`, 
             'POST',
             data,
             jwt
@@ -155,7 +155,7 @@ let clientStore = (set, get) => ({
     }, 
     updateClient: async (jwt) => {
         await CallApi(
-            `${process.env.REACT_APP_CLIENTS_API}${get().client._id}`, 
+            process.env.REACT_APP_CLIENTS_API+get().client._id, 
             'PUT',
             get().client,
             jwt
@@ -163,7 +163,7 @@ let clientStore = (set, get) => ({
     }, 
     removeClient: async (jwt, id) => {
         await CallApi(
-            `${process.env.REACT_APP_CLIENTS_API}${id}`, 
+            process.env.REACT_APP_CLIENTS_API+id, 
             'DELETE',
             '',
             jwt
@@ -175,7 +175,7 @@ let clientStore = (set, get) => ({
     }, 
     checkIn: async (jwt, id) => {
         await CallApi(
-            `${process.env.REACT_APP_CLIENTS_API}checkIn`, 
+            process.env.REACT_APP_CLIENTS_API+`checkIn`, 
             'POST',
             { clientId: id },
             jwt

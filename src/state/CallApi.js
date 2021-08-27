@@ -2,6 +2,8 @@ import axios from "axios";
 import { Notification } from "../libs/notifications"
 import { useAxiosStore, useTokenStore } from "./StateManager";
 
+axios.defaults.baseURL = process.env.REACT_APP_URL;
+console.log(process.env.REACT_APP_URL);
 
 // let setLoading = useAxiosStore( state => state.setLoading);
 const CallApi = async (url, method, data, jwt) => {
@@ -12,7 +14,7 @@ const CallApi = async (url, method, data, jwt) => {
             'x-access-token': jwt
         },
         data,
-        url
+        url: url,
     };
 
     try {
